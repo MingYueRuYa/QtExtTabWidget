@@ -9,81 +9,82 @@ import subprocess
 import sys
 import argparse
 import colorama
+import json
 
 '''
-- 配置json数据 配置文件可以指定路径再加载
+- √ 配置json数据 配置文件可以指定路径再加载
 - √ 编译处理，Debug|Release
-- 能够杀掉进程，考虑多进程的问题
+- √ 能够杀掉进程，考虑多进程的问题
 - √ 资源编译
 '''
-
-process_name = 'HearthstoneOfficialAddon.exe'
 
 
 class App:
     def __init__(self):
         pass
 
-    def _search_process(self, process_name):
-        find_flag = 0
-        process_id = 0
+    def _search_process(self):
+        list_process_id = []
         for proc in psutil.process_iter(['name', 'pid']):
-            if proc.info['name'] == process_name:
+            if proc.info['name'] == self.process_name:
                 find_flag = 1
-                process_id = proc.info['pid']
+                list_process_id.append(proc.info['pid'])
                 break
-        if find_flag == 0:
+        if len(list_process_id) == 0:
             print(colorama.Fore.GREEN + "Not find target process")
+        return list_process_id
 
-        return find_flag, process_id
 
-    def _kill_process(self, process_id):
-        target_process = psutil.Process(process_id)
-        try:
-            target_process.kill()
-            print(colorama.Fore.GREEN + "kill target process successful.")
-        except psutil.ZombieProcess:
-            print(colorama.Fore.RED + "Error: this is zombie process")
-        except psutil.AccessDenied:
-            print(colorama.Fore.RED + "Error: Access denied")
-        except psutil.TimeoutExpired:
-            print(colorama.Fore.RED + "Error: Time out expired")
-        else:
-            return 0
-        return 1
+    def _kill_process(self, list_process_id):
+        for process_id in list_process_id:
+            target_process = psutil.Process(process_id)
+            try:
+                target_process.kill()
+                print(colorama.Fore.GREEN + "kill target process successful.")
+            except psutil.ZombieProcess:
+                print(colorama.Fore.RED + "Error: this is zombie process")
+                return 1
+            except psutil.AccessDenied:
+                print(colorama.Fore.RED + "Error: Access denied")
+                return 1
+            except psutil.TimeoutExpired:
+                print(colorama.Fore.RED + "Error: Time out expired")
+                return 1
+        return 0
+
 
     def _pre_compile_code(self):
         # json配置
-        os.system("D:/code/Tools/Publish/Scripts/generate_run_env.bat")
-        print(colorama.Fore.GREEN + "compile finished.")
+        os.system(self.build_resource)
+        print(colorama.Fore.GREEN + "build resource finished.")
         return
 
     def _compile_code(self):
         compile_tool = 'devenv'
         compile_parameter = '/build "' + self.compile_args + '"'
-        compile_file = 'D:/code/HearthstoneBox/HearthstoneBox.sln'
-        os.system('devenv ' + compile_file + ' ' + compile_parameter)
+        os.system('devenv ' + self.compile_file + ' ' + compile_parameter)
 
     def _pre_env(self):
         python_dir = "C:/"
-        compile_tool_dir = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE"
         strewn = os.getenv("path")
-        os.putenv("path", python_dir + ";" + strewn + ";" + compile_tool_dir)
+        os.putenv("path", python_dir + ";" + strewn + ";" + self.compile_tool_dir)
         return
 
     def _start_process(self):
-        app_path = "D:/code/bin/Debug/HearthstoneOfficialAddon.exe"
         try:
-            subprocess.Popen([app_path, '-qa', 'devdebug'], shell=False)
+            list_process_args = [self.start_process_path]
+            for args in self.start_process_args:
+                list_process_args.append(args)
+            subprocess.Popen(list_process_args, shell=False)
             print(colorama.Fore.GREEN + "start target process successful.")
         except Exception as error:
-            print(str(error))
+            print(colorama.Fore.GREEN + str(error))
         else:
             pass
         return
 
     def _update_code(self):
-        os.system("svn up")
+        os.system(self.update_code_command)
         return
 
     def _parse_args(self, args):
@@ -95,6 +96,7 @@ class App:
         parser.add_argument('-c', '--compile', action='store_true', help='compile project')
         parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
                             help='compile project with args, for example:"Debug|Win32". default value: "Debug|Win32"')
+        parser.add_argument('-p', '--configpath', default='./config.json', type=str, help='load config json path')
         args = parser.parse_args(args)
         self.update = args.update
         self.resource = args.resource
@@ -102,43 +104,58 @@ class App:
         self.is_start = args.start
         self.is_compile = args.compile
         self.compile_args = args.compileargs
+        self.config_path = args.configpath
+
+    def _parse_config(self, config_path):
+        with open(config_path) as f:
+            data = json.load(f)
+        self.process_name = data['process_name']
+        self.update_code_command = data['update_code_command']
+        self.build_resource = data['build_resource']
+        self.compile_file = data['compile_file']
+        self.compile_tool_dir = data['compile_tool_dir']
+        self.start_process_path = data['start_process_path']
+        self.start_process_args = data['start_process_args']
 
 
     def run(self, args):
         self._parse_args(args)
+        self._parse_config(self.config_path)
 
         if self.update:
             print('------------------------start update code----------------------------')
             self._update_code()
             print('------------------------end update code------------------------------')
-
-        print('------------------------start init previous environment------------------------------')
-        self._pre_env()
-        print('------------------------end init previous environment------------------------------')
-
         if self.resource:
-            print('------------------------start previous action------------------------------')
+            print('-------------------start previous action--------------------------')
             self._pre_compile_code()
-            print('------------------------end previous action------------------------------')
+            print('--------------------end previous action---------------------------')
 
         kill_flag = 0
         if self.is_kill:
-            print('------------------------start search process------------------------------')
-            find_flag, process_id = self._search_process(process_name)
-            print('------------------------end search process------------------------------')
-            if find_flag == 1:
-                kill_flag = self._kill_process(process_id)
+            print('--------------------start search process--------------------------')
+            list_process_id = self._search_process()
+            if len(list_process_id) != 0:
+                kill_flag = self._kill_process(list_process_id)
+            print('---------------------end search process---------------------------')
         if kill_flag != 0:
-            print('------------------------stop compile project------------------------------')
+            print('--------------------stop compile project--------------------------')
         else:
             if self.is_compile:
-                print('------------------------start compile project------------------------------')
+                print('--------------------start compile project--------------------------')
+                
+                print('--------------start init previous environment--------------------')
+                self._pre_env()
+                print('---------------end init previous environment---------------------')
+
                 self._compile_code()
-                print('------------------------end compile project------------------------------')
+                print(colorama.Fore.GREEN + 'compile project finished')
+                print('--------------------end compile project----------------------------')
+
             if self.is_start:
-                print('------------------------start call application------------------------------')
+                print('--------------------start call application-------------------------')
                 self._start_process()
-                print('------------------------end call application------------------------------')
+                print('--------------------end call application---------------------------')
 
 
 if __name__ == '__main__':
