@@ -84,13 +84,14 @@ class App:
         return
 
     def _parse_args(self, args):
-        parser = argparse.ArgumentParser(description='Process some integers.')
-        parser.add_argument('-u', '--update', action='store_true')
-        parser.add_argument('-r', '--resource', action='store_true')
-        parser.add_argument('-k', '--kill', action='store_false')
-        parser.add_argument('-s', '--start', action='store_false')
-        parser.add_argument('-c', '--compile', action='store_false')
-        parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str)
+        parser = argparse.ArgumentParser(description='Tools for auto update code and compile project')
+        parser.add_argument('-u', '--update', action='store_true', help='update code by svn or git')
+        parser.add_argument('-r', '--resource', action='store_true', help='rebuild resource:for example Qt qrc file.')
+        parser.add_argument('-k', '--kill', action='store_false', help='kill target process')
+        parser.add_argument('-s', '--start', action='store_false', help='start target process')
+        parser.add_argument('-c', '--compile', action='store_false', help='compile project')
+        parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
+                            help='compile project with args. for eaxmple:"Debug|Win32"')
         args = parser.parse_args(args)
         self.update = args.update
         self.resource = args.resource
