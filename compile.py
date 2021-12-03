@@ -4,93 +4,141 @@
 # @Author  : shixiong.Liu (liushixiong@corp.netease.com)
 
 import os
+import psutil
 import subprocess
+import sys
+import argparse
 
 '''
-- 配置json数据
+- 配置json数据 配置文件可以指定路径再加载
 - 编译处理，Debug|Release
-- 能够杀掉进程
+- 能够杀掉进程，考虑多进程的问题
 - 资源编译
 '''
 
-
-def compile_code():
-    compile_tool_dir = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE"
-    strenv = os.getenv("path")
-    os.putenv("path", strenv+";" + compile_tool_dir)
-    print(os.getenv("path"))
-    # print(os.environ["VS120COMNTOOLS"])
-    # compile_tool = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.exe"
-    # compile_tool = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.com"
-    compile_tool = 'devenv'
-
-    compile_parameter = '/build \"Debug|Win32\"'
-    compile_file = 'D:/code/HearthstoneBox/HearthstoneBox.sln'
-    # os.system('cmd &&  call "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/vcvars32.bat" && devenv /?')
-    # os.system('"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.exe" /HearthstoneBox/HearthstoneBox.sln /Build \"Debug|Win32\"')
-    # os.system('"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.exe" /Build "Debug|Win32" D:/code/HearthstoneBox/HearthstoneBox.sln ')
-    # subprocess.run(args=[compile_tool, compile_file, compile_parameter], shell=False, stdout=subprocess.PIPE,
-    #               stderr=subprocess.PIPE)
-
-    # subprocess.run(args=[compile_tool, compile_file, compile_parameter], shell=True, stdout=subprocess.PIPE,
-    #                 stderr=subprocess.PIPE, check=True)
-    # subprocess.run(args=["dir"], shell=True)
-
-    # os.system('D:\\code\\update_code.bat')
-
-    os.system('devenv ' + compile_file + ' ' + compile_parameter)
+process_name = 'HearthstoneOfficialAddon.exe'
 
 
-    # temp = "devenv /?"
-    # p = subprocess.Popen('cmd', stdin=subprocess.PIPE,
-    #                      stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    # cmds = ["C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/vcvars32.bat", 'D:\\code\\update_code.bat']
-    # for cmd in cmds:
-    #     p.stdin.write((cmd + "\n").encode('utf-8'))
-    # p.stdin.close()
-    # print(p.stdout.read())
+class App:
+    def __init__(self):
+        pass
+
+    def _search_process(self, process_name):
+        find_flag = 0
+        process_id = 0
+        for proc in psutil.process_iter(['name', 'pid']):
+            if proc.info['name'] == process_name:
+                find_flag = 1
+                process_id = proc.info['pid']
+                break
+        if find_flag == 0:
+            print("Not find target process")
+
+        return find_flag, process_id
+
+    def _kill_process(self, process_id):
+        target_process = psutil.Process(process_id)
+        try:
+            target_process.kill()
+            print("kill target process successful.")
+        except psutil.ZombieProcess:
+            print("Error: this is zombie process")
+        except psutil.AccessDenied:
+            print("Error: Access denied")
+        except psutil.TimeoutExpired:
+            print("Error: Time out expired")
+        else:
+            return 0
+        return 1
+
+    def _pre_compile_code(self):
+        # json配置
+        os.system("D:/code/Tools/Publish/Scripts/generate_run_env.bat")
+        return
+
+    def _compile_code(self):
+        compile_tool = 'devenv'
+        compile_parameter = '/build "' + self.compile_args + '"'
+        compile_file = 'D:/code/HearthstoneBox/HearthstoneBox.sln'
+        os.system('devenv ' + compile_file + ' ' + compile_parameter)
+
+    def _pre_env(self):
+        python_dir = "C:/"
+        compile_tool_dir = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE"
+        strewn = os.getenv("path")
+        os.putenv("path", python_dir + ";" + strewn + ";" + compile_tool_dir)
+        return
+
+    def _start_process(self):
+        app_path = "D:/code/bin/Debug/HearthstoneOfficialAddon.exe"
+        try:
+            subprocess.Popen([app_path, '-qa', 'devdebug'], shell=False)
+        except Exception as error:
+            print(str(error))
+        else:
+            pass
+        return
+
+    def _update_code(self):
+        os.system("svn up")
+        return
+
+    def _parse_args(self, args):
+        parser = argparse.ArgumentParser(description='Process some integers.')
+        parser.add_argument('-u', '--update', action='store_true')
+        parser.add_argument('-r', '--resource', action='store_true')
+        parser.add_argument('-k', '--kill', action='store_false')
+        parser.add_argument('-s', '--start', action='store_false')
+        parser.add_argument('-c', '--compile', action='store_false')
+        parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str)
+        args = parser.parse_args(args)
+        self.update = args.update
+        self.resource = args.resource
+        self.is_kill = args.kill
+        self.is_start = args.start
+        self.is_compile = args.compile
+        self.compile_args = args.compileargs
 
 
-# import win32process, win32event
+    def run(self, args):
+        self._parse_args(args)
 
-# def CreateMyProcess2(cmd):
-#     ''' create process width no window that runs a command with arguments
-#     and returns the process handle'''
-#     si   = win32process.STARTUPINFO()
-#     info = win32process.CreateProcess(
-#         None,      # AppName
-#         cmd,       # Command line
-#         None,      # Process Security
-#         None,      # Thread Security
-#         0,         # inherit Handles?
-#         win32process.NORMAL_PRIORITY_CLASS,
-#         None,      # New environment
-#         None,      # Current directory
-#         si)        # startup info
-#     # info is tuple (hProcess, hThread, processId, threadId)
-#     return info[0]
+        if self.update:
+            print('------------------------start update code------------------------------')
+            self._update_code()
+            print('------------------------end update code------------------------------')
 
-# def test():
-#     p = subprocess.Popen('cmd.exe', stdin=subprocess.PIPE,
-#                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#     cmds = ["dir"]
-#     for cmd in cmds:
-#         p.stdin.write((cmd + "\n").encode('utf-8'))
-#     p.stdin.close()
-#     print(str(p.stdout.read(),'utf-8'))
+        print('------------------------start init previous environment------------------------------')
+        self._pre_env()
+        print('------------------------end init previous environment------------------------------')
+
+        if self.resource:
+            print('------------------------start previous action------------------------------')
+            self._pre_compile_code()
+            print('------------------------end previous action------------------------------')
+
+        kill_flag = 0
+        if self.is_kill:
+            print('------------------------start search process------------------------------')
+            find_flag, process_id = self._search_process(process_name)
+            print('------------------------end search process------------------------------')
+            if find_flag == 1:
+                kill_flag = self._kill_process(process_id)
+        if kill_flag != 0:
+            print('------------------------stop compile project------------------------------')
+        else:
+            if self.is_compile:
+                print('------------------------start compile project------------------------------')
+                self._compile_code()
+                print('------------------------end compile project------------------------------')
+            if self.is_start:
+                print('------------------------start call application------------------------------')
+                self._start_process()
+                print('------------------------end call application------------------------------')
+
 
 if __name__ == '__main__':
-    compile_code()
-    ''' create/run a process for each list element in "cmds"
-    output may be out of order because processes run concurrently '''
-
-    # cmds=["echo my","echo heart","echo belongs","echo to","echo daddy"]
-    # handles    = []
-    # for i in range(len(cmds)):
-    #     cmd    = 'cmd /c ' + cmds[i]
-    #     handle = CreateMyProcess2(cmd)
-    #     handles.append(handle)
-    #
-    # rc = win32event.WaitForMultipleObjects( handles, 1, -1)  # 1 wait for all, -1 wait infinite
-    # # print 'return code ',rc
-
+    app = App()
+    if not app.run(sys.argv[1:]):
+        sys.exit(-1)
+    sys.exit(0)
