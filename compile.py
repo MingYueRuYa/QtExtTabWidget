@@ -20,8 +20,10 @@ import json
 
 
 class App:
+
     def __init__(self):
-        _clear()
+        self._clear()
+
 
     def _clear(self):
         self.build_resource = ""
@@ -40,7 +42,7 @@ class App:
         self.is_compile = False
         self.compile_args = ""
         self.config_path = ""
-
+        
 
     def _search_process(self):
         list_process_id = []
