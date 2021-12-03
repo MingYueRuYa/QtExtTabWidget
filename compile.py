@@ -21,7 +21,26 @@ import json
 
 class App:
     def __init__(self):
-        pass
+        _clear()
+
+    def _clear(self):
+        self.build_resource = ""
+        self.start_process_args = ""
+        self.process_name = ""
+        self.start_process_path = ""
+        self.update_code_command = ""
+        self.compile_args = ""
+        self.compile_file = ""
+        self.compile_tool_dir = ""
+
+        self.update = False
+        self.resource = False
+        self.is_kill = False
+        self.is_start = False
+        self.is_compile = False
+        self.compile_args = ""
+        self.config_path = ""
+
 
     def _search_process(self):
         list_process_id = []
@@ -54,7 +73,9 @@ class App:
 
 
     def _pre_compile_code(self):
-        # json配置
+        if len(self.build_resource) == 0:
+            print(colorama.Fore.GREEN + "Not build any resource.")
+            return
         os.system(self.build_resource)
         print(colorama.Fore.GREEN + "build resource finished.")
         return
@@ -143,7 +164,7 @@ class App:
         else:
             if self.is_compile:
                 print('--------------------start compile project--------------------------')
-                
+
                 print('--------------start init previous environment--------------------')
                 self._pre_env()
                 print('---------------end init previous environment---------------------')
