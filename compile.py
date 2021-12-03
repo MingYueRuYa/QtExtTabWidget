@@ -8,12 +8,13 @@ import psutil
 import subprocess
 import sys
 import argparse
+import colorama
 
 '''
 - 配置json数据 配置文件可以指定路径再加载
-- 编译处理，Debug|Release
+- √ 编译处理，Debug|Release
 - 能够杀掉进程，考虑多进程的问题
-- 资源编译
+- √ 资源编译
 '''
 
 process_name = 'HearthstoneOfficialAddon.exe'
@@ -32,7 +33,7 @@ class App:
                 process_id = proc.info['pid']
                 break
         if find_flag == 0:
-            print("Not find target process")
+            print(colorama.Fore.GREEN + "Not find target process")
 
         return find_flag, process_id
 
@@ -40,13 +41,13 @@ class App:
         target_process = psutil.Process(process_id)
         try:
             target_process.kill()
-            print("kill target process successful.")
+            print(colorama.Fore.GREEN + "kill target process successful.")
         except psutil.ZombieProcess:
-            print("Error: this is zombie process")
+            print(colorama.Fore.RED + "Error: this is zombie process")
         except psutil.AccessDenied:
-            print("Error: Access denied")
+            print(colorama.Fore.RED + "Error: Access denied")
         except psutil.TimeoutExpired:
-            print("Error: Time out expired")
+            print(colorama.Fore.RED + "Error: Time out expired")
         else:
             return 0
         return 1
@@ -54,6 +55,7 @@ class App:
     def _pre_compile_code(self):
         # json配置
         os.system("D:/code/Tools/Publish/Scripts/generate_run_env.bat")
+        print(colorama.Fore.GREEN + "compile finished.")
         return
 
     def _compile_code(self):
@@ -73,6 +75,7 @@ class App:
         app_path = "D:/code/bin/Debug/HearthstoneOfficialAddon.exe"
         try:
             subprocess.Popen([app_path, '-qa', 'devdebug'], shell=False)
+            print(colorama.Fore.GREEN + "start target process successful.")
         except Exception as error:
             print(str(error))
         else:
@@ -87,11 +90,11 @@ class App:
         parser = argparse.ArgumentParser(description='Tools for auto update code and compile project')
         parser.add_argument('-u', '--update', action='store_true', help='update code by svn or git')
         parser.add_argument('-r', '--resource', action='store_true', help='rebuild resource:for example Qt qrc file.')
-        parser.add_argument('-k', '--kill', action='store_false', help='kill target process')
-        parser.add_argument('-s', '--start', action='store_false', help='start target process')
-        parser.add_argument('-c', '--compile', action='store_false', help='compile project')
+        parser.add_argument('-k', '--kill', action='store_true', help='kill target process')
+        parser.add_argument('-s', '--start', action='store_true', help='start target process')
+        parser.add_argument('-c', '--compile', action='store_true', help='compile project')
         parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
-                            help='compile project with args. for eaxmple:"Debug|Win32"')
+                            help='compile project with args, for example:"Debug|Win32". default value: "Debug|Win32"')
         args = parser.parse_args(args)
         self.update = args.update
         self.resource = args.resource
@@ -105,7 +108,7 @@ class App:
         self._parse_args(args)
 
         if self.update:
-            print('------------------------start update code------------------------------')
+            print('------------------------start update code----------------------------')
             self._update_code()
             print('------------------------end update code------------------------------')
 
@@ -139,6 +142,7 @@ class App:
 
 
 if __name__ == '__main__':
+    colorama.init(autoreset=True)
     app = App()
     if not app.run(sys.argv[1:]):
         sys.exit(-1)
