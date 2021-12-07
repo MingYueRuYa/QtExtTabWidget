@@ -20,13 +20,12 @@ import json
 
 
 class App:
-
     def __init__(self):
         self._clear()
 
 
     def _clear(self):
-        self.build_resource = ""
+        self.pre_compile_command = ""
         self.start_process_args = ""
         self.process_name = ""
         self.start_process_path = ""
@@ -42,7 +41,7 @@ class App:
         self.is_compile = False
         self.compile_args = ""
         self.config_path = ""
-        
+
 
     def _search_process(self):
         list_process_id = []
@@ -75,11 +74,11 @@ class App:
 
 
     def _pre_compile_code(self):
-        if len(self.build_resource) == 0:
-            print(colorama.Fore.GREEN + "Not build any resource.")
+        if len(self.pre_compile_command) == 0:
+            print(colorama.Fore.GREEN + "Not any previous compile command.")
             return
-        os.system(self.build_resource)
-        print(colorama.Fore.GREEN + "build resource finished.")
+        os.system(self.pre_compile_command)
+        print(colorama.Fore.GREEN + "execute previous compile command finished.")
         return
 
     def _compile_code(self):
@@ -88,9 +87,8 @@ class App:
         os.system('devenv ' + self.compile_file + ' ' + compile_parameter)
 
     def _pre_env(self):
-        python_dir = "C:/"
         strewn = os.getenv("path")
-        os.putenv("path", python_dir + ";" + strewn + ";" + self.compile_tool_dir)
+        os.putenv("path", strewn + ";" + self.compile_tool_dir)
         return
 
     def _start_process(self):
@@ -113,16 +111,18 @@ class App:
     def _parse_args(self, args):
         parser = argparse.ArgumentParser(description='Tools for auto update code and compile project')
         parser.add_argument('-u', '--update', action='store_true', help='update code by svn or git')
-        parser.add_argument('-r', '--resource', action='store_true', help='rebuild resource:for example Qt qrc file.')
+        parser.add_argument('-pre', '--precompileaction', action='store_true', help='build code previous action,for '
+                                                                                  'example Qt qrc file.')
         parser.add_argument('-k', '--kill', action='store_true', help='kill target process')
         parser.add_argument('-s', '--start', action='store_true', help='start target process')
         parser.add_argument('-c', '--compile', action='store_true', help='compile project')
         parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
-                            help='compile project with args, for example:"Debug|Win32". default value: "Debug|Win32"')
+                            help='compile project with args, for example:"Debug|Win32" or "Release|Win32". default '
+                                 'value: "Debug|Win32"')
         parser.add_argument('-p', '--configpath', default='./config.json', type=str, help='load config json path')
         args = parser.parse_args(args)
         self.update = args.update
-        self.resource = args.resource
+        self.pre_compileaction = args.precompileaction
         self.is_kill = args.kill
         self.is_start = args.start
         self.is_compile = args.compile
@@ -134,7 +134,7 @@ class App:
             data = json.load(f)
         self.process_name = data['process_name']
         self.update_code_command = data['update_code_command']
-        self.build_resource = data['build_resource']
+        self.pre_compile_command = data['pre_compile_command']
         self.compile_file = data['compile_file']
         self.compile_tool_dir = data['compile_tool_dir']
         self.start_process_path = data['start_process_path']
@@ -149,7 +149,7 @@ class App:
             print('------------------------start update code----------------------------')
             self._update_code()
             print('------------------------end update code------------------------------')
-        if self.resource:
+        if self.pre_compileaction:
             print('-------------------start previous action--------------------------')
             self._pre_compile_code()
             print('--------------------end previous action---------------------------')
