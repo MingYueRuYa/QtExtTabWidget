@@ -10,6 +10,7 @@ import sys
 import argparse
 import colorama
 import json
+import asyncio
 
 '''
 - √ 配置json数据 配置文件可以指定路径再加载
@@ -18,6 +19,42 @@ import json
 - √ 资源编译
 '''
 
+
+error_list = []
+
+async def _read_stream(stream, cb):
+    while True:
+        line = await stream.readline()
+        if line:
+            content = str(line, encoding='gb2312').splitlines(False)
+            if content[0].find(' error ') != -1:
+                error_list.append(content)
+            cb(content[0])
+        else:
+            break
+
+async def _stream_subprocess(cmd, stdout_cb, stderr_cb):
+    process = await asyncio.create_subprocess_shell(*cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE)
+
+    await asyncio.wait([
+        _read_stream(process.stdout, stdout_cb),
+        _read_stream(process.stderr, stderr_cb)
+    ])
+    return await process.wait()
+
+
+def execute(cmd, stdout_cb, stderr_cb):
+    loop = asyncio.get_event_loop()
+    rc = loop.run_until_complete(
+        _stream_subprocess(
+            cmd,
+            stdout_cb,
+            stderr_cb,
+    ))
+    loop.close()
+    return rc
 
 class App:
     def __init__(self):
@@ -83,8 +120,14 @@ class App:
 
     def _compile_code(self):
         compile_tool = 'devenv'
-        compile_parameter = '/build "' + self.compile_args + '"'
-        os.system('devenv ' + self.compile_file + ' ' + compile_parameter)
+        if self.rebuild:
+            compile_parameter = '/rebuild "' + self.compile_args + '"'
+        else:
+            compile_parameter = '/build "' + self.compile_args + '"'
+        execute(['devenv ' + self.compile_file + ' ' + compile_parameter],
+                lambda x: print("%s" % x),
+                lambda x: print("%s" % x))
+        return len(error_list)
 
     def _pre_env(self):
         strewn = os.getenv("path")
@@ -120,6 +163,7 @@ class App:
                             help='compile project with args, for example:"Debug|Win32" or "Release|Win32". default '
                                  'value: "Debug|Win32"')
         parser.add_argument('-p', '--configpath', default='./config.json', type=str, help='load config json path')
+        parser.add_argument('-r', '--rebuild', action='store_true', help='rebuild solution')
         args = parser.parse_args(args)
         self.update = args.update
         self.pre_compileaction = args.precompileaction
@@ -128,6 +172,7 @@ class App:
         self.is_compile = args.compile
         self.compile_args = args.compileargs
         self.config_path = args.configpath
+        self.rebuild = args.rebuild
 
     def _parse_config(self, config_path):
         with open(config_path) as f:
@@ -171,9 +216,17 @@ class App:
                 self._pre_env()
                 print('---------------end init previous environment---------------------')
 
-                self._compile_code()
-                print(colorama.Fore.GREEN + 'compile project finished')
+                result_code = self._compile_code()
+                if result_code == 0:
+                    print(colorama.Fore.GREEN + 'compile project finished')
+                else :
+                    print(colorama.Fore.RED + 'compile project errored')
+                if len(error_list) > 0:
+                    for index in error_list:
+                        print(colorama.Fore.RED + index[0])
                 print('--------------------end compile project----------------------------')
+                if result_code > 0:
+                    return
 
             if self.is_start:
                 print('--------------------start call application-------------------------')
