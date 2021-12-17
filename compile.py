@@ -17,26 +17,29 @@ import asyncio
 - √ 编译处理，Debug|Release
 - √ 能够杀掉进程，考虑多进程的问题
 - √ 资源编译
+- √ 增加编译错误检测
 '''
 
-
 error_list = []
+windows_console_encode = 'gb2312'
+
 
 async def _read_stream(stream, cb):
     while True:
         line = await stream.readline()
         if line:
-            content = str(line, encoding='gb2312').splitlines(False)
+            content = str(line, encoding=windows_console_encode).splitlines(False)
             if content[0].find(' error ') != -1:
                 error_list.append(content)
             cb(content[0])
         else:
             break
 
+
 async def _stream_subprocess(cmd, stdout_cb, stderr_cb):
     process = await asyncio.create_subprocess_shell(*cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE)
+                                                    stdout=asyncio.subprocess.PIPE,
+                                                    stderr=asyncio.subprocess.PIPE)
 
     await asyncio.wait([
         _read_stream(process.stdout, stdout_cb),
@@ -47,19 +50,17 @@ async def _stream_subprocess(cmd, stdout_cb, stderr_cb):
 
 def execute(cmd, stdout_cb, stderr_cb):
     loop = asyncio.get_event_loop()
-    rc = loop.run_until_complete(
-        _stream_subprocess(
-            cmd,
-            stdout_cb,
-            stderr_cb,
-    ))
+    rc = loop.run_until_complete(_stream_subprocess(
+                                                    cmd,
+                                                    stdout_cb,
+                                                    stderr_cb))
     loop.close()
     return rc
+
 
 class App:
     def __init__(self):
         self._clear()
-
 
     def _clear(self):
         self.pre_compile_command = ""
@@ -79,7 +80,6 @@ class App:
         self.compile_args = ""
         self.config_path = ""
 
-
     def _search_process(self):
         list_process_id = []
         for proc in psutil.process_iter(['name', 'pid']):
@@ -90,7 +90,6 @@ class App:
         if len(list_process_id) == 0:
             print(colorama.Fore.GREEN + "Not find target process")
         return list_process_id
-
 
     def _kill_process(self, list_process_id):
         for process_id in list_process_id:
@@ -108,7 +107,6 @@ class App:
                 print(colorama.Fore.RED + "Error: Time out expired")
                 return 1
         return 0
-
 
     def _pre_compile_code(self):
         if len(self.pre_compile_command) == 0:
@@ -155,7 +153,7 @@ class App:
         parser = argparse.ArgumentParser(description='Tools for auto update code and compile project')
         parser.add_argument('-u', '--update', action='store_true', help='update code by svn or git')
         parser.add_argument('-pre', '--precompileaction', action='store_true', help='build code previous action,for '
-                                                                                  'example Qt qrc file.')
+                                                                                    'example Qt qrc file.')
         parser.add_argument('-k', '--kill', action='store_true', help='kill target process')
         parser.add_argument('-s', '--start', action='store_true', help='start target process')
         parser.add_argument('-c', '--compile', action='store_true', help='compile project')
@@ -184,7 +182,6 @@ class App:
         self.compile_tool_dir = data['compile_tool_dir']
         self.start_process_path = data['start_process_path']
         self.start_process_args = data['start_process_args']
-
 
     def run(self, args):
         self._parse_args(args)
@@ -219,7 +216,7 @@ class App:
                 result_code = self._compile_code()
                 if result_code == 0:
                     print(colorama.Fore.GREEN + 'compile project finished')
-                else :
+                else:
                     print(colorama.Fore.RED + 'compile project errored')
                 if len(error_list) > 0:
                     for index in error_list:
