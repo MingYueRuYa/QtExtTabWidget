@@ -59,7 +59,7 @@ optional arguments:
 
 **编译错误提示**
 
-![image-20211220140923636](.\images\01_compile_error_tip.png)
+![image-20211220140923636](./images/01_compile_error_tip.png)
 
 
 
