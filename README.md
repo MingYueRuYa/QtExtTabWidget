@@ -1,6 +1,10 @@
-## 这个仓库主要记录自己在工作中能够提升效率的工具集合
+[TOC]
 
-### compile.py
+## 记录工作中提升效率的工具集合
+
+## 1.compile.py
+
+### 1.目的
 这个脚本的主要目的就是能够在命令行自动编译程序，杀掉程序，启动程序，更新代码。
 可以帮我节省几分钟的时间。剩下的这几分钟时间，可以让我思考刚才的修改的代码有没有问题。
 这个脚本通过`config.json`配置一些属性
@@ -12,8 +16,22 @@
 | 启动程序           |
 | 更新代码           |
 | 支持命令行字体颜色高亮          |
+| 支持编译错误识别          |
 
-**用法：**
+### 2.安装
+
+需要使用pip install命令就可以安装组件
+
+| 安装组件   |
+| :---------- |
+| psutil     |
+| subprocess |
+| colorama   |
+| asyncio    |
+
+### 3.用法
+
+#### 3.1命令选项
 
 ```bat
 PS D:\code>.\compile.py -h
@@ -36,7 +54,9 @@ optional arguments:
   -r, --rebuild         rebuild solution
 ```
 
-**config.json  **配置文件可以在命令行指定，默认就是当前的路径下
+#### 3.2 config.json配置文件
+
+**config.json  **配置文件可以在命令行指定，默认就是当前的路径下（**里面的注释需要删除**）
 
 ```json
 {
@@ -57,15 +77,24 @@ optional arguments:
 }
 ```
 
-**编译错误提示**
+#### 3.3 编译错误提示
 
 ![image-20211220140923636](./images/01_compile_error_tip.png)
 
 
 
-
-
-TODO list:
+## TODO list:
 
 - [x]  未能识别编译错误，给出提示
 - [x]  build resource 不能叫着名字，给人造成歧义
+
+
+
+## Tips:
+
+### compile.py脚本
+
+1.关于脚本中的--compileargs参数，其实就在如下图的一行中，比如这里的就是"Debug|x86"
+
+![image-20211220152108376](./images/02_vs_compile_args.png)
+
