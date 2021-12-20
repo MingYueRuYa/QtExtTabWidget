@@ -33,6 +33,7 @@ optional arguments:
                         compile project with args, for example:"Debug|Win32" or "Release|Win32". default value: "Debug|Win32"
   -p CONFIGPATH, --configpath CONFIGPATH
                         load config json path
+  -r, --rebuild         rebuild solution
 ```
 
 **config.json  **配置文件可以在命令行指定，默认就是当前的路径下
@@ -56,10 +57,15 @@ optional arguments:
 }
 ```
 
+**编译错误提示**
+
+![image-20211220140923636](.\images\01_compile_error_tip.png)
+
+
+
 
 
 TODO list:
 
-- [ ] 未能识别编译错误，给出提示
-- [ ] build resource 不能叫着名字，给人造成歧义
-
+- [x]  未能识别编译错误，给出提示
+- [x]  build resource 不能叫着名字，给人造成歧义

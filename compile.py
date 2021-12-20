@@ -129,7 +129,7 @@ class App:
 
     def _pre_env(self):
         strewn = os.getenv("path")
-        os.putenv("path", strewn + ";" + self.compile_tool_dir)
+        os.putenv("path", self.compile_tool_dir + ";" + strewn)
         return
 
     def _start_process(self):
