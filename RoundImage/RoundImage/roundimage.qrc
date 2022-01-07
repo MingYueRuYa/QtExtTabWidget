@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="RoundImage">
+    <qresource prefix="/RoundImage">
+        <file>res/images/temp.png</file>
     </qresource>
 </RCC>

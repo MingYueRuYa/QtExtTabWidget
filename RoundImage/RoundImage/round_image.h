@@ -26,5 +26,6 @@ private:
                         const QPainterPath &painterPath);
 
 private:
-    Ui::RoundImageClass ui;
+    Ui::RoundImageClass ui_;
+    QPixmap pixmap_;
 };
