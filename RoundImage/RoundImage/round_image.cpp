@@ -53,11 +53,28 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int
 					QRect(destImage.width()-shadow_width, 20, destImage.width()-20, destImage.height()-2*shadow_width));
 	
 
+	// ÉÏ×ó±ß
 	QPainterPath myPath;
 	myPath.moveTo(QPointF(20, 20));
 	myPath.arcTo(QRect(0, 0, 40, 40), 90, 90);
-	// myPath.addRect(QRect(0, 0, 20, 20));
 	drawShadowArc(painter, QPoint(20, 20), QPoint(0, 0), myPath);
+
+	// ÏÂ×ó±ß
+	myPath.moveTo(QPointF(20, destImage.height()-20));
+	myPath.arcTo(QRect(0, destImage.height()-40, 40, 40), 180, 90);
+	drawShadowArc(painter, QPoint(20, destImage.height()-20), QPoint(0, 0), myPath);
+
+	// ÉÏÓÒ±ß
+	myPath.moveTo(QPointF(destImage.width()-20, 20));
+	myPath.arcTo(QRect(destImage.width()-40, 0, 40, 40), 0, 90);
+	// painter.drawRect(QRect(destImage.width()-40, 0, 40, 40));
+	drawShadowArc(painter, QPoint(destImage.width()-20, 20), QPoint(destImage.width(), 0), myPath);
+
+	// ÏÂÓÒ±ß
+	myPath.moveTo(QPointF(destImage.width()-20, destImage.height()-20));
+	myPath.arcTo(QRect(destImage.width()-40, destImage.height()-40, 40, 40), 0, -90);
+	// painter.drawRect(QRect(destImage.width()-40, destImage.height()-40, 40, 40));
+	drawShadowArc(painter, QPoint(destImage.width()-20, destImage.height()-20), QPoint(destImage.width(), 0), myPath);
 
 //   QColor color(0, 255, 0, 255);
 //       painter.setPen(color);
@@ -90,7 +107,7 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int
 	
 
 
-	// ½«Í¼Æ¬²Ã¼ôÎªÔ²½Ç
+	//// ½«Í¼Æ¬²Ã¼ôÎªÔ²½Ç
 	QPainterPath path;
 	QRect rect(kShadowWidth, kShadowWidth, imageWidth, imageHeight);
 	path.addRoundedRect(rect, radius, radius, Qt::RelativeSize);
@@ -246,7 +263,8 @@ RoundImage::drawShadowArc(QPainter& painter,
 	const QPainterPath& painterPath)
 {
 	painter.save();
-	QRadialGradient linear(QPoint(20,20), 20);
+	// QRadialGradient linear(QPoint(20,20), 20);
+	QRadialGradient linear(startPoint, 20);
     linear.setColorAt(0, Qt::gray);
     linear.setColorAt(0.5, QColor(0, 0, 0, 50));
     linear.setColorAt(0.6, QColor(0, 0, 0, 30));
