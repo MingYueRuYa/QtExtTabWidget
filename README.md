@@ -83,10 +83,13 @@ optional arguments:
 
 
 
+
+
 ## TODO list:
 
 - [x]  未能识别编译错误，给出提示
 - [x]  build resource 不能叫着名字，给人造成歧义
+- [x]  增加编译warning提示
 
 
 

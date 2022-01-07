@@ -18,9 +18,11 @@ import asyncio
 - √ 能够杀掉进程，考虑多进程的问题
 - √ 资源编译
 - √ 增加编译错误检测
+- √ 增加编译警告检测
 '''
 
 error_list = []
+warning_list = []
 windows_console_encode = 'gb2312'
 
 
@@ -31,6 +33,8 @@ async def _read_stream(stream, cb):
             content = str(line, encoding=windows_console_encode).splitlines(False)
             if content[0].find(' error ') != -1:
                 error_list.append(content)
+            elif content[0].find(' warning ') != -1:
+                warning_list.append(content)
             cb(content[0])
         else:
             break
@@ -129,7 +133,7 @@ class App:
 
     def _pre_env(self):
         strewn = os.getenv("path")
-        os.putenv("path", self.compile_tool_dir + ";" + strewn)
+        os.putenv("path", strewn + ";" + self.compile_tool_dir)
         return
 
     def _start_process(self):
@@ -221,6 +225,9 @@ class App:
                 if len(error_list) > 0:
                     for index in error_list:
                         print(colorama.Fore.RED + index[0])
+                if len(warning_list) > 0:
+                    for index in warning_list:
+                        print(colorama.Fore.YELLOW + index[0]) 
                 print('--------------------end compile project----------------------------')
                 if result_code > 0:
                     return
