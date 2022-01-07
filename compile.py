@@ -100,7 +100,7 @@ class App:
             target_process = psutil.Process(process_id)
             try:
                 target_process.kill()
-                print(colorama.Fore.GREEN + "kill target process successful.")
+                print(colorama.Fore.GREEN + "Kill target process successful.")
             except psutil.ZombieProcess:
                 print(colorama.Fore.RED + "Error: this is zombie process")
                 return 1
@@ -114,10 +114,10 @@ class App:
 
     def _pre_compile_code(self):
         if len(self.pre_compile_command) == 0:
-            print(colorama.Fore.GREEN + "Not any previous compile command.")
+            print(colorama.Fore.RED + "Error: not any previous compile command.")
             return
         os.system(self.pre_compile_command)
-        print(colorama.Fore.GREEN + "execute previous compile command finished.")
+        print(colorama.Fore.GREEN + "Execute previous compile command finished.")
         return
 
     def _compile_code(self):
@@ -142,7 +142,7 @@ class App:
             for args in self.start_process_args:
                 list_process_args.append(args)
             subprocess.Popen(list_process_args, shell=False)
-            print(colorama.Fore.GREEN + "start target process successful.")
+            print(colorama.Fore.GREEN + "Start target process successful.")
         except Exception as error:
             print(colorama.Fore.GREEN + str(error))
         else:
@@ -150,7 +150,10 @@ class App:
         return
 
     def _update_code(self):
-        os.system(self.update_code_command)
+        if len(self.update_code_command) == 0:
+            print(colorama.Fore.RED + "Error: Not find any update code command.")
+        else:
+            os.system(self.update_code_command)
         return
 
     def _parse_args(self, args):
