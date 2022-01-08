@@ -1,7 +1,10 @@
 #include "round_image.h"
 
 #include <QPainter>
+#include <QFileInfo>
+#include <QMimeData>
 #include <QPainterPath>
+#include <QDragEnterEvent>
 
 QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int radius)
 {
@@ -74,7 +77,7 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int
 	//// ½«Í¼Æ¬²Ã¼ôÎªÔ²½Ç
 	QPainterPath path;
 	QRect rect(kShadowWidth, kShadowWidth, imageWidth, imageHeight);
-	path.addRoundedRect(rect, radius, radius, Qt::RelativeSize);
+	path.addRoundedRect(rect, radius, radius, Qt::AbsoluteSize);
 	painter.setClipPath(path);
 	painter.drawPixmap(kShadowWidth, kShadowWidth, imageWidth, imageHeight, newPixMap);
 	return destImage;
@@ -85,15 +88,48 @@ RoundImage::RoundImage(QWidget *parent)
 {
 	ui_.setupUi(this);
 
-	pixmap_ = getRoundRectPixmap(QPixmap(":/RoundImage/res/images/temp.png"), QSize(300, 500), 2);
+	setAcceptDrops(true);
+
+	// pixmap_ = getRoundRectPixmap(QPixmap(":/RoundImage/res/images/temp.png"), QSize(300, 500), 2);
+	// QPixmap dest_pixmap = QPixmap("D:\\browser_close_check_error\\0.png");
+	// pixmap_ = getRoundRectPixmap(dest_pixmap, dest_pixmap.size(), 8);
+	// pixmap_.save("D:\\0_rounder.png");
 }
 
 
-void RoundImage::paintEvent(QPaintEvent* paintEvent)
+void 
+RoundImage::paintEvent(QPaintEvent* paintEvent)
 {
 	QPainter painter(this);
 	painter.drawPixmap(30, 30, pixmap_);
 	QWidget::paintEvent(paintEvent);
+}
+
+void 
+RoundImage::dragEnterEvent(QDragEnterEvent* event)
+{
+	event->acceptProposedAction();
+}
+
+void 
+RoundImage::dropEvent(QDropEvent* event)
+{
+	const QMimeData *mimeData = event->mimeData();
+	if (mimeData->hasImage()) {
+		pixmap_ = qvariant_cast<QPixmap>(mimeData->imageData());
+		update();
+	} else if (mimeData->hasUrls()) {
+		QList<QUrl> urls= mimeData->urls();
+		QString pixmap_path = urls[0].toLocalFile();
+		QPixmap temp_pixmap = QPixmap(pixmap_path);
+		pixmap_ = getRoundRectPixmap(temp_pixmap, temp_pixmap.size(), 5);
+		QFileInfo file_info(pixmap_path);
+		QString save_file_name = file_info.path() + "/" + file_info.baseName()  + "_rounder.png";
+		pixmap_.save(save_file_name);
+		update();
+	}
+
+	event->acceptProposedAction();
 }
 
 void 

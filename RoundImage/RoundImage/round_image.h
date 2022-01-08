@@ -13,6 +13,8 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *paintEvent);
+    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     void draw4BorderShadow();
