@@ -81,7 +81,7 @@ optional arguments:
 
 ![image-20211220140923636](./images/01_compile_error_tip_rounder.png)
 
-![03_compile_warning_tip_rounder](.\images\03_compile_warning_tip_rounder.png)
+![03_compile_warning_tip_rounder](./images/03_compile_warning_tip_rounder.png)
 
 ## TODO list:
 
