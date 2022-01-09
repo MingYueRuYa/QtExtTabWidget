@@ -16,7 +16,7 @@
 | 启动程序           |
 | 更新代码           |
 | 支持命令行字体颜色高亮          |
-| 支持编译错误识别          |
+| 支持编译错误和警告识别       |
 
 ### 2.安装
 
@@ -79,16 +79,15 @@ optional arguments:
 
 #### 3.3 编译错误提示
 
-![image-20211220140923636](./images/01_compile_error_tip.png)
+![image-20211220140923636](./images/01_compile_error_tip_rounder.png)
 
-
-
-
+![03_compile_warning_tip_rounder](.\images\03_compile_warning_tip_rounder.png)
 
 ## TODO list:
 
 - [x]  未能识别编译错误，给出提示
 - [x]  build resource 不能叫着名字，给人造成歧义
+- [x]  增加编译warning提示
 - [x]  增加编译warning提示
 
 
@@ -99,7 +98,7 @@ optional arguments:
 
 1.关于脚本中的--compileargs参数，其实就在如下图的一行中，比如这里的就是"Debug|x86"
 
-![image-20211220152108376](./images/02_vs_compile_args.png)
+![image-20211220152108376](./images/02_vs_compile_args_rounder.png)
 
 
 ## 2. RoundImage
