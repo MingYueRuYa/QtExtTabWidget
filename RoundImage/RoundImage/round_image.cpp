@@ -1,3 +1,4 @@
+#include "ui_round_image.h"
 #include "round_image.h"
 
 #include <QPainter>
@@ -6,75 +7,47 @@
 #include <QPainterPath>
 #include <QDragEnterEvent>
 
-QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int radius)
+RoundImage::RoundImage(QWidget *parent)
+    : QWidget(parent), ui_(new Ui::RoundImageClass) {
+	ui_->setupUi(this);
+	setAcceptDrops(true);
+}
+
+QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, 
+										const QSize& size, 
+										int radius)
 {
-	//≤ª¥¶¿Ìø’ ˝æ›ªÚ’ﬂ¥ÌŒÛ ˝æ›
+	//‰∏çÂ§ÑÁêÜÁ©∫Êï∞ÊçÆÊàñËÄÖÈîôËØØÊï∞ÊçÆ
 	if (srcPixMap.isNull()) {
 		return srcPixMap;
 	}
 
 	const int kShadowWidth = 10;
 
-	//ªÒ»°Õº∆¨≥ﬂ¥Á
+	//Ëé∑ÂèñÂõæÁâáÂ∞∫ÂØ∏
 	int imageWidth = srcPixMap.width();
 	int imageHeight = srcPixMap.height();
 
-	//¥¶¿Ì¥Û≥ﬂ¥ÁµƒÕº∆¨,±£÷§Õº∆¨œ‘ æ«¯”ÚÕÍ’˚
-	QPixmap newPixMap = srcPixMap.scaled(imageWidth, (imageHeight == 0 ? imageWidth : imageHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	//Â§ÑÁêÜÂ§ßÂ∞∫ÂØ∏ÁöÑÂõæÁâá,‰øùËØÅÂõæÁâáÊòæÁ§∫Âå∫ÂüüÂÆåÊï¥
+	QPixmap newPixMap = srcPixMap.scaled(imageWidth, 
+                              (imageHeight == 0 ? imageWidth : imageHeight), 
+                              Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 	QPixmap destImage(imageWidth+2*kShadowWidth, imageHeight+2*kShadowWidth);
 	destImage.fill(Qt::transparent);
 	QPainter painter(&destImage);
-	// øπæ‚≥›
+	// ÊäóÈîØÈΩø
 	painter.setRenderHints(QPainter::Antialiasing, true);
-	// Õº∆¨∆Ωª¨¥¶¿Ì
+	// ÂõæÁâáÂπ≥ÊªëÂ§ÑÁêÜ
 	painter.setRenderHints(QPainter::SmoothPixmapTransform, true);
 
 	int shadow_width = 20;
-	// …œ±ﬂ
-	drawShadowRect(painter, 
-					QPoint(destImage.width()/2, shadow_width), 
-					QPoint(destImage.width()/2, 0),
-					QRect(20, 0, destImage.width()-shadow_width*2, shadow_width));
-	// œ¬±ﬂ
-	drawShadowRect(painter, 
-					QPoint(destImage.width()/2, destImage.height()-shadow_width), 
-					QPoint(destImage.width()/2, destImage.height()),
-					QRect(20, destImage.height()-shadow_width, destImage.width()-2*shadow_width, destImage.height()));
-	// ◊Û±ﬂ
-	drawShadowRect(painter, 
-					QPoint(20, destImage.height()/2), 
-					QPoint(0, destImage.height()/2),
-					QRect(0, 20, 20, destImage.height()-2*shadow_width));
-	// ”“±ﬂ
-	drawShadowRect(painter, 
-					QPoint(destImage.width()-shadow_width, destImage.height()/2), 
-					QPoint(destImage.width(), destImage.height()/2),
-					QRect(destImage.width()-shadow_width, 20, destImage.width()-20, destImage.height()-2*shadow_width));
-	
+	int shadow_width2X = shadow_width * 2;
 
-	// …œ◊Û±ﬂ
-	QPainterPath myPath;
-	myPath.moveTo(QPointF(20, 20));
-	myPath.arcTo(QRect(0, 0, 40, 40), 90, 90);
-	drawShadowArc(painter, QPoint(20, 20), QPoint(0, 0), myPath);
+	draw4BorderRectShadow(painter, shadow_width, shadow_width2X, destImage.size());
+	draw4BorderArcShadow(painter, shadow_width, shadow_width2X, destImage.size());
 
-	// œ¬◊Û±ﬂ
-	myPath.moveTo(QPointF(20, destImage.height()-20));
-	myPath.arcTo(QRect(0, destImage.height()-40, 40, 40), 180, 90);
-	drawShadowArc(painter, QPoint(20, destImage.height()-20), QPoint(0, 0), myPath);
-
-	// …œ”“±ﬂ
-	myPath.moveTo(QPointF(destImage.width()-20, 20));
-	myPath.arcTo(QRect(destImage.width()-40, 0, 40, 40), 0, 90);
-	drawShadowArc(painter, QPoint(destImage.width()-20, 20), QPoint(destImage.width(), 0), myPath);
-
-	// œ¬”“±ﬂ
-	myPath.moveTo(QPointF(destImage.width()-20, destImage.height()-20));
-	myPath.arcTo(QRect(destImage.width()-40, destImage.height()-40, 40, 40), 0, -90);
-	drawShadowArc(painter, QPoint(destImage.width()-20, destImage.height()-20), QPoint(destImage.width(), 0), myPath);
-
-	//// Ω´Õº∆¨≤√ºÙŒ™‘≤Ω«
+	// Â∞ÜÂõæÁâáË£ÅÂâ™‰∏∫ÂúÜËßí
 	QPainterPath path;
 	QRect rect(kShadowWidth, kShadowWidth, imageWidth, imageHeight);
 	path.addRoundedRect(rect, radius, radius, Qt::AbsoluteSize);
@@ -83,36 +56,21 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int
 	return destImage;
 }
 
-RoundImage::RoundImage(QWidget *parent)
-    : QWidget(parent)
+void RoundImage::paintEvent(QPaintEvent* paintEvent)
 {
-	ui_.setupUi(this);
-
-	setAcceptDrops(true);
-
-	// pixmap_ = getRoundRectPixmap(QPixmap(":/RoundImage/res/images/temp.png"), QSize(300, 500), 2);
-	// QPixmap dest_pixmap = QPixmap("D:\\browser_close_check_error\\0.png");
-	// pixmap_ = getRoundRectPixmap(dest_pixmap, dest_pixmap.size(), 8);
-	// pixmap_.save("D:\\0_rounder.png");
-}
-
-
-void 
-RoundImage::paintEvent(QPaintEvent* paintEvent)
-{
+  if (pixmap_.isNull())
+    return;
 	QPainter painter(this);
 	painter.drawPixmap(30, 30, pixmap_);
 	QWidget::paintEvent(paintEvent);
 }
 
-void 
-RoundImage::dragEnterEvent(QDragEnterEvent* event)
+void RoundImage::dragEnterEvent(QDragEnterEvent* event)
 {
 	event->acceptProposedAction();
 }
 
-void 
-RoundImage::dropEvent(QDropEvent* event)
+void RoundImage::dropEvent(QDropEvent* event)
 {
 	const QMimeData *mimeData = event->mimeData();
 	if (mimeData->hasImage()) {
@@ -132,46 +90,100 @@ RoundImage::dropEvent(QDropEvent* event)
 	event->acceptProposedAction();
 }
 
-void 
-RoundImage::drawShadowRect(QPainter &painter, 
+void RoundImage::draw4BorderRectShadow(QPainter &painter, int shadow_width, 
+	int shadow_width2X, const QSize &image_size) {
+	// ‰∏äËæπ
+	drawShadowRect(painter, 
+					QPoint(image_size.width()/2, shadow_width), 
+					QPoint(image_size.width()/2, 0),
+					QRect(shadow_width, 0, image_size.width()-shadow_width2X, shadow_width));
+	// ‰∏ãËæπ
+	drawShadowRect(painter, 
+					QPoint(image_size.width()/2, image_size.height()-shadow_width), 
+					QPoint(image_size.width()/2, image_size.height()),
+					QRect(shadow_width, image_size.height()-shadow_width, image_size.width()-shadow_width2X, image_size.height()));
+	// Â∑¶Ëæπ
+	drawShadowRect(painter, 
+					QPoint(shadow_width, image_size.height()/2), 
+					QPoint(0, image_size.height()/2),
+					QRect(0, shadow_width, shadow_width, image_size.height()-shadow_width2X));
+	// Âè≥Ëæπ
+	drawShadowRect(painter, 
+					QPoint(image_size.width()-shadow_width, image_size.height()/2), 
+					QPoint(image_size.width(), image_size.height()/2),
+					QRect(image_size.width()-shadow_width, shadow_width, image_size.width()-shadow_width, image_size.height()-shadow_width2X));
+}
+
+void RoundImage::draw4BorderArcShadow(QPainter& painter, int shadow_width,
+	int shadow_width2X, const QSize& image_size) {
+	// ‰∏äÂ∑¶Ëæπ
+	QPainterPath myPath;
+	myPath.moveTo(QPointF(shadow_width, shadow_width));
+	myPath.arcTo(QRect(0, 0, shadow_width2X, shadow_width2X), 90, 90);
+	drawShadowArc(painter, QPoint(shadow_width, shadow_width), QPoint(0, 0), myPath);
+
+	// ‰∏ãÂ∑¶Ëæπ
+	myPath.moveTo(QPointF(shadow_width, image_size.height()-shadow_width));
+	myPath.arcTo(QRect(0, image_size.height()-shadow_width2X, shadow_width2X, shadow_width2X), 180, 90);
+	drawShadowArc(painter, QPoint(shadow_width, image_size.height()-shadow_width), QPoint(0, 0), myPath);
+
+	// ‰∏äÂè≥Ëæπ
+	myPath.moveTo(QPointF(image_size.width()-shadow_width, shadow_width));
+	myPath.arcTo(QRect(image_size.width()-shadow_width2X, 0, shadow_width2X, shadow_width2X), 0, 90);
+	drawShadowArc(painter, QPoint(image_size.width()-shadow_width, shadow_width), QPoint(image_size.width(), 0), myPath);
+
+	// ‰∏ãÂè≥Ëæπ
+	myPath.moveTo(QPointF(image_size.width()-shadow_width, image_size.height()-shadow_width));
+	myPath.arcTo(QRect(image_size.width()-shadow_width2X, image_size.height()-shadow_width2X, shadow_width2X, shadow_width2X), 0, -90);
+	drawShadowArc(painter, QPoint(image_size.width()-shadow_width, image_size.height()-shadow_width), QPoint(image_size.width(), 0), myPath);
+}
+
+void RoundImage::drawShadowRect(QPainter &painter, 
 							const QPoint& startPoint,
 							const QPoint& endPoint,
 							const QRect& destRect)
 {
 	painter.save();
-    QLinearGradient linear(startPoint, endPoint);
-    linear.setColorAt(0, Qt::gray);
-    linear.setColorAt(0.5, QColor(0, 0, 0, 50));
-    linear.setColorAt(0.6, QColor(0, 0, 0, 30));
-    // linear.setColorAt(0.7, QColor(0, 0, 0, 10));
-    linear.setColorAt(1, QColor(0, 0, 0, 0));
-    // …Ë÷√œ‘ æƒ£ Ω
-    linear.setSpread(QGradient::PadSpread);
-    // …Ë÷√ª≠± —’…´°¢øÌ∂»
-    painter.setPen(Qt::NoPen);
-    // …Ë÷√ª≠À¢ÃÓ≥‰
-    painter.setBrush(linear);
-    // ªÊ÷∆Õ÷‘≤
-    painter.drawRect(destRect);
-	painter.restore();
+  QLinearGradient linear(startPoint, endPoint);
+  getGradient(startPoint, endPoint, linear);
+  painter.setPen(Qt::NoPen);
+  painter.setBrush(linear);
+  painter.drawRect(destRect);
+  painter.restore();
 }
 
-void 
-RoundImage::drawShadowArc(QPainter& painter,
+void RoundImage::drawShadowArc(QPainter& painter,
 	const QPoint& startPoint,
 	const QPoint& endPoint,
 	const QPainterPath& painterPath)
 {
 	painter.save();
-	QRadialGradient linear(startPoint, 20);
-    linear.setColorAt(0, Qt::gray);
-    linear.setColorAt(0.5, QColor(0, 0, 0, 50));
-    linear.setColorAt(0.6, QColor(0, 0, 0, 30));
-    linear.setColorAt(1, QColor(0, 0, 0, 0));
-    // …Ë÷√œ‘ æƒ£ Ω
-    linear.setSpread(QGradient::PadSpread);
-	painter.setBrush(linear);
+  QRadialGradient radial_gardeint;
+  getGradient(startPoint, 20, radial_gardeint);
+	painter.setBrush(radial_gardeint);
 	painter.setPen(Qt::NoPen);
 	painter.drawPath(painterPath);
 	painter.restore();
+}
+
+void RoundImage::getGradient(const QPoint &start_point, 
+                                  const int radius, 
+																	QRadialGradient &radial_gradient) {
+  radial_gradient = QRadialGradient(start_point, radius);
+	_getGradient(radial_gradient);
+}
+
+void RoundImage::getGradient(const QPoint& start_point,
+	const QPoint& end_point,
+	QLinearGradient& linear_gradient) {
+  linear_gradient = QLinearGradient(start_point, end_point);
+	_getGradient(linear_gradient);
+}
+
+void RoundImage::_getGradient(QGradient& gradient) {
+  gradient.setColorAt(0, Qt::gray);
+  gradient.setColorAt(0.5, QColor(0, 0, 0, 50));
+  gradient.setColorAt(0.6, QColor(0, 0, 0, 30));
+  gradient.setColorAt(1, QColor(0, 0, 0, 0));
+  gradient.setSpread(QGradient::PadSpread);
 }

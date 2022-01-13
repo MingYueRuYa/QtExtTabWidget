@@ -1,7 +1,11 @@
-#pragma once
+#ifndef ROUND_IMAGE_H
+#define ROUND_IMAGE_H
 
-#include "ui_round_image.h"
 #include <QtWidgets/QWidget>
+
+namespace Ui {
+class RoundImageClass;
+}
 
 class RoundImage : public QWidget
 {
@@ -9,7 +13,8 @@ class RoundImage : public QWidget
 
 public:
     RoundImage(QWidget *parent = Q_NULLPTR);
-    QPixmap getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int radius);
+    QPixmap getRoundRectPixmap(QPixmap srcPixMap, 
+        const QSize& size, int radius);
 
 protected:
     virtual void paintEvent(QPaintEvent *paintEvent);
@@ -17,17 +22,30 @@ protected:
     virtual void dropEvent(QDropEvent *event);
 
 private:
-    void draw4BorderShadow();
+    void draw4BorderRectShadow(QPainter &painter, int shadow_width, 
+	                  int shadow_width2X, const QSize &image_size);
+    void draw4BorderArcShadow(QPainter &painter, int shadow_width, 
+	                  int shadow_width2X, const QSize &image_size);
     void drawShadowRect(QPainter &painter,
 						const QPoint &startPoint, 
-                        const QPoint &endPoint, 
-                        const QRect &destRect);
+            const QPoint &endPoint, 
+            const QRect &destRect);
     void drawShadowArc(QPainter &painter,
-						const QPoint &startPoint, 
-                        const QPoint &endPoint, 
-                        const QPainterPath &painterPath);
+        const QPoint &startPoint, 
+        const QPoint &endPoint, 
+        const QPainterPath &painterPath);
 
-private:
-    Ui::RoundImageClass ui_;
-    QPixmap pixmap_;
+  void getGradient(const QPoint &start_point, 
+                    const int radius, 
+                    QRadialGradient &radial_gradient);
+  void getGradient(const QPoint &start_point, 
+	                  const QPoint& end_point,
+                    QLinearGradient &linear_gradient);
+  void _getGradient(QGradient &gradient);
+
+ private:
+  Ui::RoundImageClass *ui_;
+  QPixmap pixmap_;
 };
+
+#endif // ROUND_IMAGE_H
