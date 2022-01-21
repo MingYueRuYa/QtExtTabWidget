@@ -20,32 +20,6 @@ class RoundImage : public QWidget {
   virtual void dropEvent(QDropEvent* event);
 
  private:
-  void draw4BorderRectShadow(QPainter* painter,
-                             int shadow_width,
-                             int shadow_width2X,
-                             const QSize& image_size);
-  void draw4BorderArcShadow(QPainter* painter,
-                            int shadow_width,
-                            int shadow_width2X,
-                            const QSize& image_size);
-  void drawShadowRect(QPainter* painter,
-                      const QPoint& startPoint,
-                      const QPoint& endPoint,
-                      const QRect& destRect);
-  void drawShadowArc(QPainter* painter,
-                     const QPoint& startPoint,
-                     const QPoint& endPoint,
-                     const QPainterPath& painterPath);
-
-  void getGradient(const QPoint& start_point,
-                   const int radius,
-                   QRadialGradient& radial_gradient);
-  void getGradient(const QPoint& start_point,
-                   const QPoint& end_point,
-                   QLinearGradient& linear_gradient);
-  void _getGradient(QGradient& gradient);
-
- private:
   Ui::RoundImageClass* ui_;
   QPixmap pixmap_;
 };

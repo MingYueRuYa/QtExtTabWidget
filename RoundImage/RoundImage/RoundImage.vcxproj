@@ -96,11 +96,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="round_image_helper.cpp" />
     <QtRcc Include="roundimage.qrc" />
     <QtUic Include="round_image.ui" />
     <QtMoc Include="round_image.h" />
     <ClCompile Include="round_image.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="round_image_helper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
