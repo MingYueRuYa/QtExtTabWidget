@@ -1,5 +1,6 @@
 #include "round_image.h"
 #include "round_image_helper.h"
+#include "round_shadow_helper.h"
 #include "ui_round_image.h"
 
 #include <QDragEnterEvent>
@@ -22,6 +23,11 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap,
 }
 
 void RoundImage::paintEvent(QPaintEvent* paintEvent) {
+  //  QPainter painter(this);
+  //  RoundShadowHelper round_shadow;
+  //  round_shadow.RoundShadow(&painter, this->rect());
+  //
+  ////  return;
   if (pixmap_.isNull())
     return;
   QPainter painter(this);
