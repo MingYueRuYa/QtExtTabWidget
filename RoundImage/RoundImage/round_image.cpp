@@ -1,6 +1,7 @@
 #include "round_image.h"
 #include "round_image_helper.h"
 #include "round_shadow_helper.h"
+#include "round_shadow_widget.h"
 #include "ui_round_image.h"
 
 #include <QDragEnterEvent>
@@ -13,6 +14,10 @@ RoundImage::RoundImage(QWidget* parent)
     : QWidget(parent), ui_(new Ui::RoundImageClass) {
   ui_->setupUi(this);
   setAcceptDrops(true);
+
+  RoundShadowWidget* widget = new RoundShadowWidget(this);
+  widget->setFixedSize(QSize(600, 800));
+  widget->move(50, 50);
 }
 
 QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap,

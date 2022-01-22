@@ -51,6 +51,9 @@ class RoundShadowHelper {
 
   DEFINE_CLASS_MEMBER_DEFAULT(int, shadow_width, ShadowWidth, 20)
   DEFINE_CLASS_MEMBER_DEFAULT(int, radius, Radius, 5)
+
+  friend class RoundImageHelper;
+  friend class RoundShadowWidget;
 };
 
 #endif  // !ROUND_SHADOW_HELPER_H

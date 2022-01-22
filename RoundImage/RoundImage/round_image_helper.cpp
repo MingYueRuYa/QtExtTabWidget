@@ -1,5 +1,4 @@
 #include "round_image_helper.h"
-#include "round_shadow_helper.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -8,18 +7,16 @@
 // 2.阴影可以调整
 // 3.圆角可以调整
 // 4.圆角4个阴影可以调整
-// RoundImageHelper::RoundImageHelper(const int shadow_width, const int radius)
-//    : shadow_width_(shadow_width), radius_(radius) {}
+RoundImageHelper::RoundImageHelper(const int shadow_width, const int radius)
+    : RoundShadowHelper(shadow_width, radius) {}
 
 QPixmap RoundImageHelper::RoundImage(const QPixmap& source_pixmap) {
-  //不处理空数据或者错误数据
   if (source_pixmap.isNull())
     return source_pixmap;
 
-  RoundShadowHelper helper;
-  const int kBORDER_DISTANCE = helper.GetShadowWidth() / 2;
-  const int kSHADOW_WIDTH = helper.GetShadowWidth();
-  const int kSHADOW_WIDTH2X = helper.GetShadowWidth() * 2;
+  const int kBORDER_DISTANCE = shadow_width_ / 2;
+  const int kSHADOW_WIDTH = shadow_width_;
+  const int kSHADOW_WIDTH2X = shadow_width_ * 2;
 
   //获取图片尺寸
   int image_width = source_pixmap.width();
@@ -32,14 +29,12 @@ QPixmap RoundImageHelper::RoundImage(const QPixmap& source_pixmap) {
   painter.setRenderHints(QPainter::Antialiasing, true);
   painter.setRenderHints(QPainter::SmoothPixmapTransform, true);
 
-  helper.RoundShadow(&painter,
-                     QRect(0, 0, dest_image.width(), dest_image.height()));
+  RoundShadow(&painter, QRect(0, 0, dest_image.width(), dest_image.height()));
 
   // 将图片裁剪为圆角
   QPainterPath path;
   QRect rect(kBORDER_DISTANCE, kBORDER_DISTANCE, image_width, image_height);
-  path.addRoundedRect(rect, helper.GetRadius(), helper.GetRadius(),
-                      Qt::AbsoluteSize);
+  path.addRoundedRect(rect, radius_, radius_, Qt::AbsoluteSize);
   painter.setClipPath(path);
   painter.drawPixmap(kBORDER_DISTANCE, kBORDER_DISTANCE, image_width,
                      image_height, new_pixmap);
