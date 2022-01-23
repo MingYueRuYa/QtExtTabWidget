@@ -19,6 +19,13 @@ class RoundShadowWidget : public QWidget, public RoundShadowHelper {
 
  protected:
   virtual void paintEvent(QPaintEvent* ev) override;
+  virtual void mousePressEvent(QMouseEvent* event) override;
+  virtual void mouseReleaseEvent(QMouseEvent* event) override;
+  virtual void mouseMoveEvent(QMouseEvent* event) override;
+
+ private:
+  bool is_press_ = false;
+  QPoint move_point_;
 };
 
 #endif  // ROUND_SHADOW_WIDGET

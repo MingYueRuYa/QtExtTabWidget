@@ -19,7 +19,7 @@ class RoundShadowHelper {
   explicit RoundShadowHelper() = default;
   explicit RoundShadowHelper(const int shadow_width, const int radius);
   ~RoundShadowHelper() = default;
-  void RoundShadow(QPainter* painter, const QRect &rect);
+  void RoundShadow(QPainter* painter, const QRect& rect);
 
  private:
   void draw4BorderRectShadow(QPainter* painter,

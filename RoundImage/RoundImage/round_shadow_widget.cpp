@@ -1,5 +1,7 @@
 #include "round_shadow_widget.h"
 
+#include <QDebug>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
 
@@ -10,7 +12,9 @@
 // RoundImageHelper::RoundImageHelper(const int shadow_width, const int radius)
 //    : shadow_width_(shadow_width), radius_(radius) {}
 
-RoundShadowWidget::RoundShadowWidget(QWidget* parent) : QWidget(parent) {}
+RoundShadowWidget::RoundShadowWidget(QWidget* parent) : QWidget(parent) {
+  setMouseTracking(true);
+}
 
 RoundShadowWidget::RoundShadowWidget(const int shadow_width,
                                      const int radius,
@@ -37,4 +41,32 @@ void RoundShadowWidget::paintEvent(QPaintEvent* ev) {
   painter.setPen(Qt::NoPen);
   painter.setBrush(Qt::white);
   painter.drawPath(path);
+}
+
+void RoundShadowWidget::mousePressEvent(QMouseEvent* event) {
+  switch (event->button()) {
+    case Qt::LeftButton:
+      is_press_ = true;
+      move_point_ = event->globalPos() - pos();
+      break;
+    default:
+      break;
+  }
+}
+
+void RoundShadowWidget::mouseReleaseEvent(QMouseEvent* event) {
+  switch (event->button()) {
+    case Qt::LeftButton:
+      is_press_ = false;
+      break;
+    default:
+      break;
+  }
+}
+
+void RoundShadowWidget::mouseMoveEvent(QMouseEvent* event) {
+  if (!is_press_)
+    return;
+
+  move(event->globalPos()-move_point_);
 }
