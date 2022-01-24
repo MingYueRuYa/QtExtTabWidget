@@ -15,6 +15,9 @@ class RoundImage : public QWidget {
   QPixmap getRoundRectPixmap(QPixmap srcPixMap, const QSize& size, int radius);
 
  protected:
+  void CreatePictureWidget(const QPixmap& pixmap);
+
+ protected:
   virtual void paintEvent(QPaintEvent* paintEvent);
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);

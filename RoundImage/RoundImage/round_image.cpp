@@ -1,6 +1,7 @@
 #include "round_image.h"
 #include "round_image_helper.h"
 #include "round_shadow_helper.h"
+#include "round_shadow_picture_widget.h"
 #include "round_shadow_widget.h"
 #include "ui_round_image.h"
 
@@ -25,6 +26,11 @@ QPixmap RoundImage::getRoundRectPixmap(QPixmap srcPixMap,
                                        int radius) {
   RoundImageHelper image_helper;
   return image_helper.RoundImage(srcPixMap);
+}
+
+void RoundImage::CreatePictureWidget(const QPixmap& pixmap) {
+  RoundShadowPictureWidget* widget = new RoundShadowPictureWidget(pixmap, this);
+  widget->show();
 }
 
 void RoundImage::paintEvent(QPaintEvent* paintEvent) {
@@ -52,13 +58,15 @@ void RoundImage::dropEvent(QDropEvent* event) {
   } else if (mimeData->hasUrls()) {
     QList<QUrl> urls = mimeData->urls();
     QString pixmap_path = urls[0].toLocalFile();
-    QPixmap temp_pixmap = QPixmap(pixmap_path);
-    pixmap_ = getRoundRectPixmap(temp_pixmap, temp_pixmap.size(), 5);
-    QFileInfo file_info(pixmap_path);
-    QString save_file_name =
-        file_info.path() + "/" + file_info.baseName() + "_rounder.png";
-    pixmap_.save(save_file_name);
-    update();
+    CreatePictureWidget(QPixmap(pixmap_path));
+    // QPixmap temp_pixmap = QPixmap(pixmap_path);
+    //    pixmap_ = getRoundRectPixmap(temp_pixmap,
+    //    temp_pixmap.size(), 5);
+    //    QFileInfo file_info(pixmap_path);
+    //    QString save_file_name =
+    //        file_info.path() + "/" + file_info.baseName() + "_rounder.png";
+    //    pixmap_.save(save_file_name);
+    //    update();
   }
 
   event->acceptProposedAction();

@@ -44,29 +44,15 @@ void RoundShadowWidget::paintEvent(QPaintEvent* ev) {
 }
 
 void RoundShadowWidget::mousePressEvent(QMouseEvent* event) {
-  switch (event->button()) {
-    case Qt::LeftButton:
-      is_press_ = true;
-      move_point_ = event->globalPos() - pos();
-      break;
-    default:
-      break;
-  }
+  move_widget_helper_.mousePressEvent(event, pos());
 }
 
 void RoundShadowWidget::mouseReleaseEvent(QMouseEvent* event) {
-  switch (event->button()) {
-    case Qt::LeftButton:
-      is_press_ = false;
-      break;
-    default:
-      break;
-  }
+  move_widget_helper_.mouseReleaseEvent(event);
 }
 
 void RoundShadowWidget::mouseMoveEvent(QMouseEvent* event) {
-  if (!is_press_)
-    return;
-
-  move(event->globalPos()-move_point_);
+  if (move_widget_helper_.CanMove()) {
+    move(move_widget_helper_.mouseMoveEvent(event));
+  }
 }

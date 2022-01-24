@@ -96,6 +96,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="move_widget_helper.cpp" />
+    <ClCompile Include="round_shadow_picture_widget.cpp" />
     <ClCompile Include="round_image_helper.cpp" />
     <ClCompile Include="round_shadow_helper.cpp" />
     <ClCompile Include="round_shadow_widget.cpp" />
@@ -106,6 +108,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="round_shadow_picture_widget.h" />
+    <ClInclude Include="move_widget_helper.h" />
     <ClInclude Include="round_image_helper.h" />
     <ClInclude Include="round_shadow_helper.h" />
     <QtMoc Include="round_shadow_widget.h" />

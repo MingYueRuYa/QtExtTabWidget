@@ -1,6 +1,7 @@
 #ifndef ROUND_SHADOW_WIDGET
 #define ROUND_SHADOW_WIDGET
 
+#include "move_widget_helper.h"
 #include "round_shadow_helper.h"
 
 #include <QWidget>
@@ -18,14 +19,15 @@ class RoundShadowWidget : public QWidget, public RoundShadowHelper {
   ~RoundShadowWidget() = default;
 
  protected:
-  virtual void paintEvent(QPaintEvent* ev) override;
-  virtual void mousePressEvent(QMouseEvent* event) override;
-  virtual void mouseReleaseEvent(QMouseEvent* event) override;
-  virtual void mouseMoveEvent(QMouseEvent* event) override;
+  virtual void paintEvent(QPaintEvent* ev);
+  virtual void mousePressEvent(QMouseEvent* event);
+  virtual void mouseReleaseEvent(QMouseEvent* event);
+  virtual void mouseMoveEvent(QMouseEvent* event);
 
  private:
   bool is_press_ = false;
   QPoint move_point_;
+  MoveWidgetHelper move_widget_helper_;
 };
 
 #endif  // ROUND_SHADOW_WIDGET

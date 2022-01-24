@@ -49,6 +49,12 @@
     <ClCompile Include="round_shadow_widget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="round_shadow_picture_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="move_widget_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="round_image_helper.h">
@@ -57,9 +63,15 @@
     <ClInclude Include="round_shadow_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="move_widget_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="round_shadow_widget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="round_shadow_picture_widget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
