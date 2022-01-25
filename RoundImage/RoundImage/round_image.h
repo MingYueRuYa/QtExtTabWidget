@@ -16,6 +16,7 @@ class RoundImage : public QWidget {
 
  protected:
   void CreatePictureWidget(const QPixmap& pixmap);
+  void CreatePictureWidget(const QString& pixmap_path);
 
  protected:
   virtual void paintEvent(QPaintEvent* paintEvent);

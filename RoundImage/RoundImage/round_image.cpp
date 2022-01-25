@@ -33,12 +33,13 @@ void RoundImage::CreatePictureWidget(const QPixmap& pixmap) {
   widget->show();
 }
 
+void RoundImage::CreatePictureWidget(const QString& pixmap_path) {
+  RoundShadowPictureWidget* widget =
+      new RoundShadowPictureWidget(pixmap_path, this);
+  widget->show();
+}
+
 void RoundImage::paintEvent(QPaintEvent* paintEvent) {
-  //  QPainter painter(this);
-  //  RoundShadowHelper round_shadow;
-  //  round_shadow.RoundShadow(&painter, this->rect());
-  //
-  ////  return;
   if (pixmap_.isNull())
     return;
   QPainter painter(this);
@@ -57,16 +58,9 @@ void RoundImage::dropEvent(QDropEvent* event) {
     update();
   } else if (mimeData->hasUrls()) {
     QList<QUrl> urls = mimeData->urls();
-    QString pixmap_path = urls[0].toLocalFile();
-    CreatePictureWidget(QPixmap(pixmap_path));
-    // QPixmap temp_pixmap = QPixmap(pixmap_path);
-    //    pixmap_ = getRoundRectPixmap(temp_pixmap,
-    //    temp_pixmap.size(), 5);
-    //    QFileInfo file_info(pixmap_path);
-    //    QString save_file_name =
-    //        file_info.path() + "/" + file_info.baseName() + "_rounder.png";
-    //    pixmap_.save(save_file_name);
-    //    update();
+    for (auto& item : urls) {
+      CreatePictureWidget(item.toLocalFile());
+    }
   }
 
   event->acceptProposedAction();
