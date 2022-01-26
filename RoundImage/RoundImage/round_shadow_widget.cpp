@@ -44,6 +44,7 @@ void RoundShadowWidget::paintEvent(QPaintEvent* ev) {
 }
 
 void RoundShadowWidget::mousePressEvent(QMouseEvent* event) {
+  this->raise();
   move_widget_helper_.mousePressEvent(event, pos());
 }
 

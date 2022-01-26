@@ -38,8 +38,8 @@ void RoundShadowPictureWidget::setupUI() {
 }
 
 void RoundShadowPictureWidget::updateUI() {
-  if (!pixmap_.isNull()) {
-    this->setFixedSize(pixmap_.size());
+  if (!round_shadow_pixmap_.isNull()) {
+    this->setFixedSize(round_shadow_pixmap_.size());
   }
 }
 
@@ -51,6 +51,7 @@ void RoundShadowPictureWidget::paintEvent(QPaintEvent* event) {
 }
 
 void RoundShadowPictureWidget::mousePressEvent(QMouseEvent* event) {
+  this->raise();
   move_widget_helper_.mousePressEvent(event, pos());
 }
 
