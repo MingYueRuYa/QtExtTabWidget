@@ -26,8 +26,12 @@ class RoundShadowPictureWidget : public QWidget {
   virtual void mouseMoveEvent(QMouseEvent* event) override;
   virtual void contextMenuEvent(QContextMenuEvent* event) override;
 
+ signals:
+  void Exit(RoundShadowPictureWidget *);
+
  protected slots:
   void on_action_save_triggered(bool);
+  void on_action_exit_triggered(bool);
 
  private:
   QPixmap pixmap_;

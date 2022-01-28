@@ -35,6 +35,11 @@ void RoundShadowPictureWidget::setupUI() {
   connect(action, SIGNAL(triggered(bool)), this,
           SLOT(on_action_save_triggered(bool)));
   menu_.addAction(action);
+  action = new QAction(tr("exit"), this);
+  action->setObjectName("action_exit");
+  connect(action, SIGNAL(triggered(bool)), this,
+          SLOT(on_action_exit_triggered(bool)));
+  menu_.addAction(action);
 }
 
 void RoundShadowPictureWidget::updateUI() {
@@ -82,4 +87,8 @@ void RoundShadowPictureWidget::on_action_save_triggered(bool) {
       round_shadow_pixmap_.save(file_name);
     }
   }
+}
+
+void RoundShadowPictureWidget::on_action_exit_triggered(bool) {
+  emit Exit(this);
 }

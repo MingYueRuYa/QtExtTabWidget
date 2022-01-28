@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QWidget>
 
+class RoundShadowPictureWidget;
+
 namespace Ui {
 class RoundImageClass;
 }
@@ -22,6 +24,9 @@ class RoundImage : public QWidget {
   virtual void paintEvent(QPaintEvent* paintEvent);
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);
+
+ protected slots:
+  void DoWidgetExit(RoundShadowPictureWidget *widget);
 
  private:
   Ui::RoundImageClass* ui_;

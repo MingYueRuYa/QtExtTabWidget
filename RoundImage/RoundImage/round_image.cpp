@@ -37,6 +37,8 @@ void RoundImage::CreatePictureWidget(const QString& pixmap_path) {
   RoundShadowPictureWidget* widget =
       new RoundShadowPictureWidget(pixmap_path, this);
   widget->show();
+  connect(widget, SIGNAL(Exit(RoundShadowPictureWidget*)), this,
+          SLOT(DoWidgetExit(RoundShadowPictureWidget*)));
 }
 
 void RoundImage::paintEvent(QPaintEvent* paintEvent) {
@@ -64,4 +66,9 @@ void RoundImage::dropEvent(QDropEvent* event) {
   }
 
   event->acceptProposedAction();
+}
+
+void RoundImage::DoWidgetExit(RoundShadowPictureWidget* widget) {
+  widget->hide();
+  widget->deleteLater();
 }
