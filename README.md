@@ -89,6 +89,7 @@ optional arguments:
 - [x]  build resource 不能叫着名字，给人造成歧义
 - [x]  增加编译warning提示
 - [x]  增加编译warning提示
+- [ ]  在中断编译的时候，发现devenv 没有退出，导致再编译的时候发现文件被占用，编译失败
 
 
 
