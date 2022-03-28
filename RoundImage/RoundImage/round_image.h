@@ -26,7 +26,7 @@ class RoundImage : public QWidget {
   virtual void dropEvent(QDropEvent* event);
 
  protected slots:
-  void DoWidgetExit(RoundShadowPictureWidget *widget);
+  void DoWidgetExit(RoundShadowPictureWidget* widget);
 
  private:
   Ui::RoundImageClass* ui_;
