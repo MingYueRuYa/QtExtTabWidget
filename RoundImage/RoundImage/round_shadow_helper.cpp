@@ -43,40 +43,42 @@ void RoundShadowHelper::draw4BorderRectShadow(QPainter* painter,
                                               int shadow_width,
                                               int shadow_width2X,
                                               const QRect& dest_rect) {
-  int rect_width = dest_rect.width();
-  int rect_height = dest_rect.height();
-  int rect_pos_x = dest_rect.x();
-  int rect_pos_y = dest_rect.y();
+  const int rect_width = dest_rect.width();
+  const int rect_height = dest_rect.height();
+  const int rect_pos_x = dest_rect.x();
+  const int rect_pos_y = dest_rect.y();
+  const QSize horizontal_size = QSize(rect_width-shadow_width2X, shadow_width);
+  const QSize vertical_size = QSize(shadow_width, rect_height-shadow_width2X);
   // 上边
   QPoint start_point =
-      QPoint(rect_pos_x + rect_width / 2.0, shadow_width + rect_pos_y);
+      QPoint(rect_pos_x + rect_width / 2.0, rect_pos_y + shadow_width);
   QPoint end_point = QPoint(rect_pos_x + rect_width / 2, 0 + rect_pos_y);
   drawShadowRect(painter, start_point, end_point,
-                 QRect(shadow_width + rect_pos_x, rect_pos_y,
-                       rect_width - shadow_width2X, shadow_width));
+                 QRect(QPoint(shadow_width + rect_pos_x, rect_pos_y),
+                       horizontal_size));
   // 下边
   start_point = QPoint(rect_pos_x + rect_width / 2.0,
                        rect_pos_y + rect_height - shadow_width);
   end_point = QPoint(rect_pos_x + rect_width / 2.0, rect_pos_y + rect_height);
   drawShadowRect(
       painter, start_point, end_point,
-      QRect(shadow_width + rect_pos_x, rect_height - shadow_width + rect_pos_y,
-            rect_width - shadow_width2X, rect_height));
+      QRect(QPoint(shadow_width + rect_pos_x, rect_height - shadow_width + rect_pos_y),
+            horizontal_size));
 
   // 左边
   start_point = QPoint(rect_pos_x + shadow_width, rect_pos_y + rect_height / 2);
   end_point = QPoint(rect_pos_x, rect_pos_y + rect_height / 2);
   drawShadowRect(painter, start_point, end_point,
-                 QRect(0 + rect_pos_x, shadow_width + rect_pos_y, shadow_width,
-                       rect_height - shadow_width2X));
+                 QRect(QPoint(rect_pos_x, shadow_width + rect_pos_y),
+                       vertical_size));
   // 右边
   start_point = QPoint(rect_pos_x + rect_width - shadow_width,
                        rect_pos_y + rect_height / 2);
   end_point = QPoint(rect_pos_x + rect_width, rect_pos_y + rect_height / 2);
   drawShadowRect(
       painter, start_point, end_point,
-      QRect(rect_width - shadow_width + rect_pos_x, shadow_width + rect_pos_y,
-            rect_width - shadow_width, rect_height - shadow_width2X));
+      QRect(QPoint(rect_width - shadow_width + rect_pos_x, shadow_width + rect_pos_y),
+            vertical_size));
 }
 
 void RoundShadowHelper::draw4BorderArcShadow(QPainter* painter,
