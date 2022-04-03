@@ -32,6 +32,10 @@ class RoundShadowHelper {
   void RoundShadow(QPainter* painter,
                    const QRect& rect,
                    RoundDirection dirc = D_ALL);
+  void FillRoundShadow(QPainter* painter,
+                       const QRect& rect,
+                       const QColor& fill_color,
+                       int radius);
 
  private:
   void draw4BorderRectShadow(QPainter* painter,

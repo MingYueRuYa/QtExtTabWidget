@@ -44,6 +44,20 @@ void RoundShadowHelper::RoundShadow(QPainter* painter,
   //  painter->drawPath(path);
 }
 
+void RoundShadowHelper::FillRoundShadow(QPainter* painter,
+                                        const QRect& rect,
+                                        const QColor& fill_color,
+                                        int radius) {
+  painter->save();
+  QPainterPath path;
+  path.addRoundedRect(rect, radius, radius, Qt::AbsoluteSize);
+  painter->setClipPath(path);
+  painter->setPen(Qt::NoPen);
+  painter->setBrush(fill_color);
+  painter->drawPath(path);
+  painter->restore();
+}
+
 void RoundShadowHelper::draw4BorderRectShadow(QPainter* painter,
                                               int shadow_width,
                                               int shadow_width2X,
@@ -137,70 +151,72 @@ void RoundShadowHelper::draw4BorderArcShadow(QPainter* painter,
     center_pos = QPoint(-shadow_width, shadow_width) + top_right_pos;
     arc_path.moveTo(center_pos);
     arc_path.arcTo(QRect(QPoint(-shadow_width2X, 0) + top_right_pos, rect_size),
-      0, 90);
+                   0, 90);
     drawShadowArc(painter, center_pos, top_right_pos, arc_path);
   }
 
   // 下右边
   if (dirc & RoundDirc::D_BOTTOM) {
     QPoint bottom_right_pos =
-      QPoint(dest_rect.x() + rect_width, dest_rect.y() + rect_height);
+        QPoint(dest_rect.x() + rect_width, dest_rect.y() + rect_height);
     center_pos = QPoint(-shadow_width, -shadow_width) + bottom_right_pos;
     arc_path.moveTo(center_pos);
     arc_path.arcTo(
-      QRect(QPoint(-shadow_width2X, -shadow_width2X) + bottom_right_pos,
-        rect_size),
-      0, -90);
+        QRect(QPoint(-shadow_width2X, -shadow_width2X) + bottom_right_pos,
+              rect_size),
+        0, -90);
     drawShadowArc(painter, center_pos, bottom_right_pos, arc_path);
   }
-  }
+}
 
-  void RoundShadowHelper::drawShadowRect(
-      QPainter * painter, const QPoint& startPoint, const QPoint& endPoint,
-      const QRect& destRect) {
-    painter->save();
-    QLinearGradient linear(startPoint, endPoint);
-    getGradient(startPoint, endPoint, linear);
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(linear);
-    painter->drawRect(destRect);
-    painter->restore();
-  }
+void RoundShadowHelper::drawShadowRect(QPainter* painter,
+                                       const QPoint& startPoint,
+                                       const QPoint& endPoint,
+                                       const QRect& destRect) {
+  painter->save();
+  QLinearGradient linear(startPoint, endPoint);
+  getGradient(startPoint, endPoint, linear);
+  painter->setPen(Qt::NoPen);
+  painter->setBrush(linear);
+  painter->drawRect(destRect);
+  painter->restore();
+}
 
-  void RoundShadowHelper::drawShadowArc(
-      QPainter * painter, const QPoint& startPoint, const QPoint& endPoint,
-      const QPainterPath& painterPath) {
-    painter->save();
-    QRadialGradient radial_gardeint;
-    getGradient(startPoint, shadow_width_, radial_gardeint);
-    painter->setBrush(radial_gardeint);
-    painter->setPen(Qt::NoPen);
-    painter->drawPath(painterPath);
-    painter->restore();
-  }
+void RoundShadowHelper::drawShadowArc(QPainter* painter,
+                                      const QPoint& startPoint,
+                                      const QPoint& endPoint,
+                                      const QPainterPath& painterPath) {
+  painter->save();
+  QRadialGradient radial_gardeint;
+  getGradient(startPoint, shadow_width_, radial_gardeint);
+  painter->setBrush(radial_gardeint);
+  painter->setPen(Qt::NoPen);
+  painter->drawPath(painterPath);
+  painter->restore();
+}
 
-  void RoundShadowHelper::getGradient(const QPoint& start_point,
-                                      const int radius,
-                                      QRadialGradient& radial_gradient) {
-    radial_gradient = QRadialGradient(start_point, radius);
-    _getGradient(radial_gradient);
-  }
+void RoundShadowHelper::getGradient(const QPoint& start_point,
+                                    const int radius,
+                                    QRadialGradient& radial_gradient) {
+  radial_gradient = QRadialGradient(start_point, radius);
+  _getGradient(radial_gradient);
+}
 
-  void RoundShadowHelper::getGradient(const QPoint& start_point,
-                                      const QPoint& end_point,
-                                      QLinearGradient& linear_gradient) {
-    linear_gradient = QLinearGradient(start_point, end_point);
-    _getGradient(linear_gradient);
-  }
+void RoundShadowHelper::getGradient(const QPoint& start_point,
+                                    const QPoint& end_point,
+                                    QLinearGradient& linear_gradient) {
+  linear_gradient = QLinearGradient(start_point, end_point);
+  _getGradient(linear_gradient);
+}
 
-  void RoundShadowHelper::_getGradient(QGradient & gradient) {
-    QColor color = Qt::gray;
-    gradient.setColorAt(0, color);
-    color.setAlpha(50);
-    gradient.setColorAt(0.5, color);
-    color.setAlpha(30);
-    gradient.setColorAt(0.6, color);
-    color.setAlpha(0);
-    gradient.setColorAt(1, color);
-    gradient.setSpread(QGradient::PadSpread);
-  }
+void RoundShadowHelper::_getGradient(QGradient& gradient) {
+  QColor color = Qt::gray;
+  gradient.setColorAt(0, color);
+  color.setAlpha(50);
+  gradient.setColorAt(0.5, color);
+  color.setAlpha(30);
+  gradient.setColorAt(0.6, color);
+  color.setAlpha(0);
+  gradient.setColorAt(1, color);
+  gradient.setSpread(QGradient::PadSpread);
+}

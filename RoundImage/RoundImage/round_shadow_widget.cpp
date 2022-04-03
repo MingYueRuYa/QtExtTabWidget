@@ -30,17 +30,14 @@ void RoundShadowWidget::paintEvent(QPaintEvent* ev) {
   painter.setRenderHints(QPainter::Antialiasing, true);
   painter.setRenderHints(QPainter::SmoothPixmapTransform, true);
 
-  RoundShadow(&painter, QRect(0, 0, this->width(), this->height()));
+  // RoundShadow(&painter, QRect(0, 0, this->width(), this->height()));
+  // RoundShadow(&painter, QRect(50, 50, 200, 200));
 
-  QPainterPath path;
+  RoundShadow(&painter, QRect(0, 0, this->width(), this->height()));
   QRect rect(kBORDER_DISTANCE, kBORDER_DISTANCE,
              this->width() - kBORDER_DISTANCE * 2,
              this->height() - kBORDER_DISTANCE * 2);
-  path.addRoundedRect(rect, radius_, radius_, Qt::AbsoluteSize);
-  painter.setClipPath(path);
-  painter.setPen(Qt::NoPen);
-  painter.setBrush(Qt::white);
-  painter.drawPath(path);
+  FillRoundShadow(&painter, rect, Qt::white, radius_);
 }
 
 void RoundShadowWidget::mousePressEvent(QMouseEvent* event) {
