@@ -16,20 +16,34 @@
 
 class RoundShadowHelper {
  public:
+  enum RoundDirection {
+    D_NONE = 0,
+    D_TOP = 0x1 << 1,
+    D_BOTTOM = 0x1 << 2,
+    D_LEFT = 0x1 << 3,
+    D_RIGHT = 0x1 << 4,
+    D_ALL = D_TOP | D_BOTTOM | D_LEFT | D_RIGHT
+  };
+
+ public:
   explicit RoundShadowHelper() = default;
   explicit RoundShadowHelper(const int shadow_width, const int radius);
   ~RoundShadowHelper() = default;
-  void RoundShadow(QPainter* painter, const QRect& rect);
+  void RoundShadow(QPainter* painter,
+                   const QRect& rect,
+                   RoundDirection dirc = D_ALL);
 
  private:
   void draw4BorderRectShadow(QPainter* painter,
                              int shadow_width,
                              int shadow_width2X,
-                             const QRect& dest_rect);
+                             const QRect& dest_rect,
+                             RoundDirection dirc);
   void draw4BorderArcShadow(QPainter* painter,
                             int shadow_width,
                             int shadow_width2X,
-                            const QRect& dest_rect);
+                            const QRect& dest_rect,
+                            RoundDirection dirc);
   void drawShadowRect(QPainter* painter,
                       const QPoint& startPoint,
                       const QPoint& endPoint,
