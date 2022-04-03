@@ -25,11 +25,11 @@ class RoundShadowHelper {
   void draw4BorderRectShadow(QPainter* painter,
                              int shadow_width,
                              int shadow_width2X,
-                             const QSize& image_size);
+                             const QRect& dest_rect);
   void draw4BorderArcShadow(QPainter* painter,
                             int shadow_width,
                             int shadow_width2X,
-                            const QSize& image_size);
+                            const QRect& dest_rect);
   void drawShadowRect(QPainter* painter,
                       const QPoint& startPoint,
                       const QPoint& endPoint,
