@@ -12,8 +12,8 @@ public:
     ~TabBarSingal()  {}
 
 signals:
-  void AddBtnClicked();
-  void CloseTab(int index);
+  void addBtnClicked();
+  void closeTab(int index);
   void signalStartDrag(int index);
   void signalEndDrag();
 

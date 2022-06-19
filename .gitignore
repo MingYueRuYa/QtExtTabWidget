@@ -33,6 +33,6 @@
 
 # vs solution
 *.suo
-*.opensdf
+*.sdf
 *.user
 

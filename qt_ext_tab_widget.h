@@ -56,17 +56,6 @@ class QtExtTabWidget : public QTabWidget {
  protected:
   void setTabBar2(QTabBar *tab_bar);
 
- Q_SIGNALS:
-  //  void AddBtnClicked();
-  //  void TabInserted(int index);
-  //  void TabClosed(int index);
-  //  void closeWnd();
-  //  void minWnd();
-  //  void maxWnd();
-  //  void restoreWnd();
-  //  void tabBarDoubleClicked();
-  // void signalTabMerged(QWidget *widget);
-
  protected Q_SLOTS:
   void OnCloseTab(int index);
   void OnTabBarDoubleClicked(int index);

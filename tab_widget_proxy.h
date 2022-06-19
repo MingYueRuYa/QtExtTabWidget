@@ -12,6 +12,7 @@
 
 class QtExtTabWidget;
 class NcFramelessHelper;
+class BaseTabBarDrawHelper;
 using QtExtTabBarDef::TabState;
 
 class TabWidgetProxy : public QWidget,
@@ -22,7 +23,12 @@ class TabWidgetProxy : public QWidget,
   explicit TabWidgetProxy(QWidget *parent = 0);
   ~TabWidgetProxy();
   bool filterTabBarEvent(QObject *obj, QEvent *event);
+  void addTab2(QWidget *widget, const QString &label);
   QTabBar *tabBar() const;
+  const TabWidgetSignal &getSignal() const;
+  void setTabButton2(int index, QTabBar::ButtonPosition, QWidget *btn);
+  void setTabIcon(int index, const QIcon &icon);
+  void updateDrawHelp(BaseTabBarDrawHelper *helper);
 
  private:
   void setupUI();
@@ -38,25 +44,12 @@ class TabWidgetProxy : public QWidget,
   void OnMaxOrRestore();
 
  private:
-  void paintTabAddBtn(QPainter &painter, const QRect &rect, TabState tab_state);
-  void paintTab(QPainter &painter, const QRect &rect, TabState tab_state,
-                const QString &text, const QIcon &icon);
-  void paintTabBar(QPainter &painter, const QRect &rect);
-  void paintScrollBtn(bool left, QPainter &painter, const QRect &rect,
-                      const QToolButton *tool_btn);
-  QRect calcIconRect(bool left_button, const QSize &icon_size,
-                     const QRect &btn_rect);
   bool isHasParent() const;
+  void connectSignal();
 
  private:
   NcFramelessHelper *frame_less_helper_ = nullptr;
   QtExtTabWidget *ext_tab_widget_;
-  QPixmap tab_bar_bk_image_;
-  QPixmap tab_bk_normal_image_;
-  QPixmap tab_bk_hover_image_;
-  QPixmap tab_bk_selected_image_;
-  QList<QPixmap> left_arrow_pixmap_list_;
-  QList<QPixmap> right_arrow_pixmap_list_;
   TabWidgetSignal signal_;
 };
 

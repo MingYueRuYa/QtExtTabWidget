@@ -351,9 +351,9 @@ void QtExtTabWidget::setupUI() {
     tab_bar_ = new QtExtTabBar(this);
     setTabBar(tab_bar_);
   }
-  connect(&(tab_bar_->getSignal()), SIGNAL(AddBtnClicked()), this,
-          SIGNAL(AddBtnClicked()));
-  connect(&(tab_bar_->getSignal()), SIGNAL(CloseTab(int)), this,
+  connect(&(tab_bar_->getSignal()), SIGNAL(addBtnClicked()), &signal_,
+          SIGNAL(addBtnClicked()));
+  connect(&(tab_bar_->getSignal()), SIGNAL(closeTab(int)), this,
           SLOT(OnCloseTab(int)));
 
   button_widget_ = new ButtonWidget(this);
@@ -393,13 +393,12 @@ QtExtTabWidget *QtExtTabWidget::createDraggedNewWindow() {
   if (button != nullptr) {
     window->setTabButton2(0, QTabBar::RightSide, button);
   }
-  if (!is_main_ && count() == 0)  // 标签拖完了
+  if (!is_main_ && count() == 0)
     deleteLater();
   window->raise();
   window->setFocus();
   dragging_widget_->setFocus();
   QTimer::singleShot(0, dragging_widget_, [=] {
-    // 为啥要延迟……
     window->setFocus();
   });
   return window;

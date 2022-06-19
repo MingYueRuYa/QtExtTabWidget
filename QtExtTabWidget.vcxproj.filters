@@ -63,6 +63,9 @@
     <ClCompile Include="tab_widget_proxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tab_bar_draw_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qt_ext_tabbar.h">
@@ -124,6 +127,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="weak_call_back.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base_tab_bar_draw_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tab_bar_draw_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

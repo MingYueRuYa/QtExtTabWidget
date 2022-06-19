@@ -128,7 +128,7 @@ void QtExtTabBar::mousePressEvent(QMouseEvent *event) {
 
   int index = pointInTabRectIndex(event->pos());
   if (index == count() - 1 && tab_add_button_) {
-    emit signal_.AddBtnClicked();
+    emit signal_.addBtnClicked();
     return;
   }
 
@@ -238,7 +238,7 @@ void QtExtTabBar::OnRightWidgetClicked() {
   for (int i = 0; i < count(); ++i) {
     QWidget *widget = tabButton(i, QTabBar::RightSide);
     if (widget != obj) continue;
-    emit signal_.CloseTab(i);
+    emit signal_.closeTab(i);
     break;
   }
 }
