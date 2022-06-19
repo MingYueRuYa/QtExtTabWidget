@@ -1,0 +1,22 @@
+#ifndef TAB_BAR_SIGNAL_H
+#define TAB_BAR_SIGNAL_H
+
+#include <QObject>
+
+class TabBarSingal : public QObject
+{
+    Q_OBJECT
+
+public:
+    TabBarSingal() {}
+    ~TabBarSingal()  {}
+
+signals:
+  void AddBtnClicked();
+  void CloseTab(int index);
+  void signalStartDrag(int index);
+  void signalEndDrag();
+
+};
+
+#endif // TAB_BAR_SIGNAL_H

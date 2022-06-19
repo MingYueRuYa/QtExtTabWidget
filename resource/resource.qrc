@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="">
+        <file>images/x-capture-options.png</file>
+	<file>images/close.png</file>
+	<file>images/close_hover.png</file>
+	<file>images/default_100_precent/caption_bg.png</file>
+	<file>images/default_100_precent/tab.png</file>
+	<file>images/default_100_precent/tab_hover.png</file>
+	<file>images/default_100_precent/tab_check.png</file>
+	<file>images/default_100_precent/tab_close_hover.png</file>
+	<file>images/default_100_precent/tab_close_pressed.png</file>
+	<file>images/default_100_precent/min.png</file>
+	<file>images/default_100_precent/min_hover.png</file>
+	<file>images/default_100_precent/min_pressed.png</file>
+	<file>images/default_100_precent/max.png</file>
+	<file>images/default_100_precent/max_hover.png</file>
+	<file>images/default_100_precent/max_pressed.png</file>
+	<file>images/default_100_precent/close.png</file>
+	<file>images/default_100_precent/close_hover.png</file>
+	<file>images/default_100_precent/close_pressed.png</file>
+	<file>images/default_100_precent/restore.png</file>
+	<file>images/default_100_precent/restore_hover.png</file>
+	<file>images/default_100_precent/restore_pressed.png</file>
+	<file>images/default_100_precent/left_arrow_normal.png</file>
+	<file>images/default_100_precent/left_arrow_disabled.png</file>
+	<file>images/default_100_precent/right_arrow_normal.png</file>
+	<file>images/default_100_precent/right_arrow_disabled.png</file>
+    </qresource>
+</RCC>

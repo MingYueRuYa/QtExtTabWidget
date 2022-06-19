@@ -1,0 +1,9 @@
+{
+	"process_name":"QtExtTabWidget.exe",
+	"update_code_command":"git pull",
+	"pre_compile_command":"",
+	"compile_file":"../tabwidget_demo.sln",
+	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE",
+	"start_process_path":"../win32/debug/QtExtTabWidget.exe",
+	"start_process_args":[]
+}

@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="button_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NcFrameLessHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_ext_button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_ext_tab_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_ext_tabbar_style.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="round_shadow_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_ext_tabbar.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tab_widget_proxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="qt_ext_tabbar.h">
+      <Filter>Source Files</Filter>
+    </QtMoc>
+    <QtMoc Include="button_widget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="common_ui_enums.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="mainwindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="qt_ext_tab_widget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tab_widget_proxy.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tab_bar_signal.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tab_widget_signal.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="button_widget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="mainwindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common_ui_define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NcFrameLessHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_ext_button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_ext_tab_bar_define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_ext_tabbar_style.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="round_shadow_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weak_call_back.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="tabwidget_demo.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\images\x-capture-options.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\close.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\close_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\caption_bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\tab.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\tab_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\tab_check.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\tab_close_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\tab_close_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\min.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\min_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\min_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\max.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\max_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\max_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\close.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\close_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\close_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\restore.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\restore_hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\restore_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\left_arrow_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\left_arrow_disabled.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\right_arrow_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\images\default_100_precent\right_arrow_disabled.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resource\resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+</Project>
