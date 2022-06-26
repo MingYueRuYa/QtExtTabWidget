@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="">
-        <file>images/x-capture-options.png</file>
 	<file>images/close.png</file>
 	<file>images/close_hover.png</file>
 	<file>images/default_100_precent/caption_bg.png</file>
