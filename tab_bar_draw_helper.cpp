@@ -1,7 +1,9 @@
+#include "tab_bar_draw_helper.h"
+
 #include <QFont>
+
 #include "draw_helper.h"
 #include "round_shadow_helper.h"
-#include "tab_bar_draw_helper.h"
 
 TabBarDrawHelper::TabBarDrawHelper() {
   tab_bar_bk_image_.load(":/images/default_100_precent/caption_bg.png");
@@ -53,8 +55,8 @@ void TabBarDrawHelper::paintTab(QPainter &painter, const QRect &draw_rect,
   QRect real_rect = draw_rect;
   real_rect -= QMargins(35, 0, 30, 0);
   painter.setPen(Qt::white);
-  QString draw_text =
-      painter.fontMetrics().elidedText(text, Qt::ElideRight, real_rect.width(), 0);
+  QString draw_text = painter.fontMetrics().elidedText(text, Qt::ElideRight,
+                                                       real_rect.width(), 0);
   painter.drawText(real_rect, Qt::AlignLeft | Qt::AlignVCenter, draw_text);
   painter.restore();
   // draw tab icon
@@ -62,11 +64,13 @@ void TabBarDrawHelper::paintTab(QPainter &painter, const QRect &draw_rect,
     painter.save();
     painter.setPen(Qt::NoPen);
     QList<QSize> actual_size = icon.availableSizes();
-    QSize icon_size = actual_size[0];
-    QPoint icon_point = QPoint(draw_rect.left() + 5,
-                               (draw_rect.height() - icon_size.height()) / 2);
-    QRect icon_rect(icon_point, icon_size);
-    painter.drawPixmap(icon_rect, icon.pixmap(icon_size));
+    if (actual_size.empty()) {
+      QSize icon_size = actual_size[0];
+      QPoint icon_point = QPoint(draw_rect.left() + 5,
+                                 (draw_rect.height() - icon_size.height()) / 2);
+      QRect icon_rect(icon_point, icon_size);
+      painter.drawPixmap(icon_rect, icon.pixmap(icon_size));
+    }
     painter.restore();
   }
 }
