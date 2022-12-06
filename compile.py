@@ -24,6 +24,7 @@ import asyncio
 error_list = []
 warning_list = []
 windows_console_encode = 'gb2312'
+devenv_process_id = 0
 
 
 async def _read_stream(stream, cb):
@@ -41,15 +42,16 @@ async def _read_stream(stream, cb):
 
 
 async def _stream_subprocess(cmd, stdout_cb, stderr_cb):
-    process = await asyncio.create_subprocess_shell(*cmd,
+    process_info = await asyncio.create_subprocess_shell(*cmd,
                                                     stdout=asyncio.subprocess.PIPE,
                                                     stderr=asyncio.subprocess.PIPE)
-
+    global devenv_process_id
+    devenv_process_id = process_info.pid
     await asyncio.wait([
-        _read_stream(process.stdout, stdout_cb),
-        _read_stream(process.stderr, stderr_cb)
+        _read_stream(process_info.stdout, stdout_cb),
+        _read_stream(process_info.stderr, stderr_cb)
     ])
-    return await process.wait()
+    return await process_info.wait()
 
 
 def execute(cmd, stdout_cb, stderr_cb):
@@ -61,7 +63,6 @@ def execute(cmd, stdout_cb, stderr_cb):
     loop.close()
     return rc
 
-
 class App:
     def __init__(self):
         self._clear()
@@ -71,6 +72,7 @@ class App:
         self.start_process_args = ""
         self.process_name = ""
         self.start_process_path = ""
+        self.start_release_process_path = ""
         self.update_code_command = ""
         self.compile_args = ""
         self.compile_file = ""
@@ -80,6 +82,7 @@ class App:
         self.resource = False
         self.is_kill = False
         self.is_start = False
+        self.is_start_release = False
         self.is_compile = False
         self.compile_args = ""
         self.config_path = ""
@@ -116,7 +119,10 @@ class App:
         if len(self.pre_compile_command) == 0:
             print(colorama.Fore.RED + "Error: not any previous compile command.")
             return
-        os.system(self.pre_compile_command)
+        if os.path.isabs(self.pre_compile_command):
+            os.system(self.pre_compile_command)
+        else:
+            os.system(os.getcwd() + '/' + self.pre_compile_command)
         print(colorama.Fore.GREEN + "Execute previous compile command finished.")
         return
 
@@ -126,9 +132,15 @@ class App:
             compile_parameter = '/rebuild "' + self.compile_args + '"'
         else:
             compile_parameter = '/build "' + self.compile_args + '"'
-        execute(['devenv ' + self.compile_file + ' ' + compile_parameter],
-                lambda x: print("%s" % x),
-                lambda x: print("%s" % x))
+        if os.path.isabs(self.compile_file):
+            execute(['devenv "' + self.compile_file + '" ' + compile_parameter],
+                    lambda x: print("%s" % x),
+                    lambda x: print("%s" % x))
+        else:
+            solution_file = os.getcwd() +'/'+ self.compile_file
+            execute(['devenv "' + solution_file + '" ' + compile_parameter],
+                    lambda x: print("%s" % x),
+                    lambda x: print("%s" % x))
         return len(error_list)
 
     def _pre_env(self):
@@ -136,17 +148,19 @@ class App:
         os.putenv("path", self.compile_tool_dir + ";" + strewn)
         return
 
-    def _start_process(self):
+
+    def _start_process(self, process_path):
         try:
-            list_process_args = [self.start_process_path]
+            list_process_args = [process_path]
             for args in self.start_process_args:
                 list_process_args.append(args)
-            subprocess.Popen(list_process_args, shell=False)
-            print(colorama.Fore.GREEN + "Start target process successful.")
+            sub_process = subprocess.Popen(list_process_args, shell=False)
+            print(colorama.Fore.GREEN + "Start target process successful. pid =" + str(sub_process.pid))
         except Exception as error:
             print(colorama.Fore.GREEN + str(error))
         else:
             pass
+        print(colorama.Fore.GREEN + ' '.join(list_process_args))
         return
 
     def _update_code(self):
@@ -163,6 +177,7 @@ class App:
                                                                                     'example Qt qrc file.')
         parser.add_argument('-k', '--kill', action='store_true', help='kill target process')
         parser.add_argument('-s', '--start', action='store_true', help='start target process')
+        parser.add_argument('-sr', '--start_release', action='store_true', help='start release version target process')
         parser.add_argument('-c', '--compile', action='store_true', help='compile project')
         parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
                             help='compile project with args, for example:"Debug|Win32" or "Release|Win32". default '
@@ -174,10 +189,13 @@ class App:
         self.pre_compileaction = args.precompileaction
         self.is_kill = args.kill
         self.is_start = args.start
+        self.is_start_release = args.start_release
         self.is_compile = args.compile
         self.compile_args = args.compileargs
-        self.config_path = args.configpath
         self.rebuild = args.rebuild
+        self.config_path = args.configpath
+        if not os.path.exists(self.config_path):
+            self.config_path = "./private_init_env/" + os.getenv("username") + "/config.json"
 
     def _parse_config(self, config_path):
         with open(config_path) as f:
@@ -188,6 +206,7 @@ class App:
         self.compile_file = data['compile_file']
         self.compile_tool_dir = data['compile_tool_dir']
         self.start_process_path = data['start_process_path']
+        self.start_release_process_path = data['start_release_process_path']
         self.start_process_args = data['start_process_args']
 
     def run(self, args):
@@ -237,13 +256,44 @@ class App:
 
             if self.is_start:
                 print('--------------------start call application-------------------------')
-                self._start_process()
+                if os.path.isabs(self.start_process_path):
+                    process_path = self.start_process_path
+                else:
+                    process_path = os.getcwd() + "/" + self.start_process_path
+                self._start_process(process_path)
+                print('--------------------end call application---------------------------')
+            elif self.is_start_release:
+                print('--------------------start call application-------------------------')
+                if os.path.isabs(self.start_release_process_path):
+                    process_path = self.start_release_process_path
+                else:
+                    process_path = os.getcwd() + "/" + self.start_release_process_path
+                self._start_process(process_path)
                 print('--------------------end call application---------------------------')
 
 
+import getpass
+
+def kill_process_tree():
+    if devenv_process_id == 0:
+        return
+    print(colorama.Fore.RED + 'Got Ctrl+C signal')
+    print(colorama.Fore.RED + '--------------------start kill process tree-------------------------')
+    parent = psutil.Process(devenv_process_id)
+    try:
+        for child in parent.children(recursive=True):  # or parent.children() for recursive=False
+            child.kill()
+        parent.kill()
+    except:
+        pass
+    print(colorama.Fore.RED + '--------------------end kill process tree-------------------------')
+
 if __name__ == '__main__':
     colorama.init(autoreset=True)
-    app = App()
-    if not app.run(sys.argv[1:]):
-        sys.exit(-1)
+    try:
+        app = App()
+        if not app.run(sys.argv[1:]):
+            sys.exit(-1)
+    except KeyboardInterrupt:
+        kill_process_tree()
     sys.exit(0)

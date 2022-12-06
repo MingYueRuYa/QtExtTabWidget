@@ -1,9 +1,10 @@
 {
-	"process_name":"HearthstoneOfficialAddon.exe",
-	"update_code_command":"svn up",
-	"pre_compile_command":"D:/code/Tools/Publish/Scripts/generate_run_env.bat",
-	"compile_file":"D:/code/HearthstoneBox/HearthstoneBox.sln",
-	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE",
-	"start_process_path":"D:/code/bin/Debug/HearthstoneOfficialAddon.exe",
-	"start_process_args":["-qa", "devdebug"]
+	"process_name":"roundimage.exe",
+	"update_code_command":"",
+	"pre_compile_command":"",
+	"compile_file":"./RoundImage/RoundImage.sln",
+	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/IDE",
+	"start_process_path":"./RoundImage/Debug/RoundImage.exe",
+    "start_release_process_path":"./RoundImage/Release/RoundImage.exe",
+	"start_process_args":["", ""]
 }
