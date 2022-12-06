@@ -10,11 +10,29 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPainterPath>
+#include <QDebug>
+#include <Windows.h>
 
 RoundImage::RoundImage(QWidget* parent)
     : QWidget(parent), ui_(new Ui::RoundImageClass) {
   ui_->setupUi(this);
   setAcceptDrops(true);
+
+//  TODO: not work
+//   bool result = ChangeWindowMessageFilter(WM_DROPFILES, MSGFLT_ADD);
+//   if (!result) {
+//     qDebug() << ::GetLastError();
+//   }
+//   ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
+//   ChangeWindowMessageFilter(0x0049, MSGFLT_ADD);
+//   ChangeWindowMessageFilter(SPI_SETANIMATION, MSGFLT_ADD);
+
+//   HWND hwnd = (HWND)this->winId();
+//   ::DragAcceptFiles(hwnd, TRUE);
+//   ::ChangeWindowMessageFilterEx(hwnd, WM_DROPFILES, MSGFLT_ALLOW, nullptr);
+//   ::ChangeWindowMessageFilterEx(hwnd, WM_COPYDATA, MSGFLT_ALLOW, nullptr);
+//   // WM_COPYGLOBALDATA = 0x0049
+//   ::ChangeWindowMessageFilterEx(hwnd, 0x0049, MSGFLT_ALLOW, nullptr);
 
   RoundShadowWidget* widget = new RoundShadowWidget(this);
   widget->setFixedSize(QSize(600, 800));
