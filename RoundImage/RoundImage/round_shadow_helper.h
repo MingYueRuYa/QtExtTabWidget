@@ -64,8 +64,9 @@ class RoundShadowHelper {
                    const QPoint& end_point,
                    QLinearGradient& linear_gradient);
 
- private:
-  void _getGradient(QGradient& gradient);
+ protected:
+  //TODO：可以自定义渐变色
+  virtual void _getGradient(QGradient& gradient);
 
   DEFINE_CLASS_MEMBER_DEFAULT(int, shadow_width, ShadowWidth, 20)
   DEFINE_CLASS_MEMBER_DEFAULT(int, radius, Radius, 5)
