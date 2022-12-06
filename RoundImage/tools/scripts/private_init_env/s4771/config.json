@@ -1,0 +1,10 @@
+{
+	"process_name":"roundimage.exe",
+	"update_code_command":"",
+	"pre_compile_command":"",
+	"compile_file":"../../RoundImage.sln",
+	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/IDE",
+	"start_process_path":"../../Debug/RoundImage.exe",
+    "start_release_process_path":"../../Release/RoundImage.exe",
+	"start_process_args":["", ""]
+}
