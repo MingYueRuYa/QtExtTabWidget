@@ -11,12 +11,10 @@ class CusBtn :
     public QPushButton 
 {
   Q_OBJECT
+
 public:
   explicit CusBtn(QWidget *parent = nullptr);
   ~CusBtn();
-
-protected:
-  //void mouseReleaseEvent(QMouseEvent* e);
 
 
 protected slots:

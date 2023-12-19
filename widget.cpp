@@ -1,32 +1,13 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "cus_button.h"
+#include "ext_tab_bar.h"
+#include "ext_tab_bar_style.h"
 
 #include <QLabel>
 #include <QTabBar>
 #include <QPushButton>
 #include <QButtonGroup>
-#include <QStyleOption>
-
-
-QRect QExtTabBarStyle::subElementRect(SubElement element,
-                                      const QStyleOption *option,
-                                      const QWidget *widget) const {
-     if (SE_TabBarTabLeftButton == element ) {
-          const QStyleOptionTab *tab_option = qstyleoption_cast<const QStyleOptionTab *>(option);
-          QRect rect = tab_option->rect;
-          rect.setWidth(150);
-          rect.setHeight(30);
-          return rect;
-     }
-     else
-     {
-        return QProxyStyle::subElementRect(element, option, widget);
-     }
-
-}
-
-QTabBar *g_bar = nullptr;
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -35,13 +16,6 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
 
-    //  "QPushButton{"
-    //      "border: 2px solid #8f8f91;"
-    //      "border-radius: 6px;"
-    //      "background-color: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 : 1,"
-    //                                        "stop : 0 #f6f7fa, stop: 1 #dadbde);"
-    //      "min-width: 80px;"
-    //"}"
     QString style = "QPushButton:hover{background-color:yellow;}"
       "QPushButton:pressed{"
       "background-color: #FF00FF00;"
@@ -50,19 +24,19 @@ Widget::Widget(QWidget *parent)
       "background-color: #FFFFFF00;"
       "}";
     
-    QExtTabBar *bar = new QExtTabBar(this);
-    bar->setStyle(new QExtTabBarStyle(bar));
-    bar->addTab("");
-    bar->addTab("");
-    bar->addTab("");
+    tab_bar_ = new QExtTabBar(this);
+    tab_bar_->setStyle(new QExtTabBarStyle(tab_bar_));
+    tab_bar_->addTab("");
+    tab_bar_->addTab("");
+    tab_bar_->addTab("");
 
-    QPushButton *label = new QPushButton(bar);
+    QPushButton* label = new QPushButton(tab_bar_);
     label->setCheckable(true);
     connect(label, SIGNAL(clicked()), this, SLOT(test()));
     label->setFixedSize(QSize(150,30));
     label->setText("this is label");
     label->setStyleSheet(style);
-    QPushButton *label2 = new QPushButton(bar);
+    QPushButton *label2 = new QPushButton(tab_bar_);
     connect(label2, SIGNAL(clicked()), this, SLOT(test2()));
     label2->setCheckable(true);
     label2->setFixedSize(QSize(150,30));
@@ -73,23 +47,22 @@ Widget::Widget(QWidget *parent)
     group->addButton(label);
     group->addButton(label2);
 
-    bar->setTabButton(0, QTabBar::LeftSide, label);
-    bar->setTabButton(1, QTabBar::LeftSide, label2);
+    tab_bar_->setTabButton(0, QTabBar::LeftSide, label);
+    tab_bar_->setTabButton(1, QTabBar::LeftSide, label2);
 
-    CusBtn* cus_btn = new CusBtn(bar);
+    CusBtn* cus_btn = new CusBtn(tab_bar_);
     cus_btn->setCheckable(true);
     cus_btn->setStyleSheet(style);
     cus_btn->setFixedWidth(150);
     group->addButton(cus_btn);
-    bar->setTabButton(2, QTabBar::LeftSide, cus_btn);
+    tab_bar_->setTabButton(2, QTabBar::LeftSide, cus_btn);
     connect(cus_btn, SIGNAL(change_index()), this, SLOT(do_change_index()));
 
-    bar->setStyleSheet("background-color:red;padding:0 0 0 0;");
-    bar->setContentsMargins(0, 0, 0, 0);
-    ui->widget_tabbar_container->layout()->addWidget(bar);
+    tab_bar_->setStyleSheet("background-color:red;padding:0 0 0 0;");
+    tab_bar_->setContentsMargins(0, 0, 0, 0);
+    ui->widget_tabbar_container->layout()->addWidget(tab_bar_);
     ui->widget_tabbar_container->setFixedWidth(450);
-    bar->setFixedHeight(ui->widget_tabbar_container->height());
-    g_bar = bar;
+    tab_bar_->setFixedHeight(ui->widget_tabbar_container->height());
 }
 
 Widget::~Widget()
