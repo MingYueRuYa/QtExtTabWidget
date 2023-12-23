@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
-    <height>35</height>
+    <width>290</width>
+    <height>31</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,6 +31,10 @@ background-color:#FF0000FF;
 
 QPushButton#Ui_CusBtn:pressed {
 background-color:#FFFF00FF;
+}
+
+QPushButton#Ui_CusBtn:checked {
+background-color:#FFFFFFFF;
 }
 
 </string>

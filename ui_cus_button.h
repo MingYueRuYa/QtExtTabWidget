@@ -32,7 +32,7 @@ public:
     {
         if (Ui_CusBtn->objectName().isEmpty())
             Ui_CusBtn->setObjectName(QString::fromUtf8("Ui_CusBtn"));
-        Ui_CusBtn->resize(150, 35);
+        Ui_CusBtn->resize(290, 31);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -49,6 +49,10 @@ public:
 "\n"
 "QPushButton#Ui_CusBtn:pressed {\n"
 "background-color:#FFFF00FF;\n"
+"}\n"
+"\n"
+"QPushButton#Ui_CusBtn:checked {\n"
+"background-color:#FFFFFFFF;\n"
 "}\n"
 "\n"
 ""));

@@ -16,6 +16,7 @@ class QExtTabBar : public QTabBar {
 
  private:
   void mouse_release_event(QMouseEvent* event);
+  void tab_mouse_move_event(QObject *obj, QMouseEvent* event);
 
  signals:
   void switch_widget(QWidget* widget);
@@ -34,6 +35,7 @@ protected slots:
   virtual void mouseReleaseEvent(QMouseEvent* e);
   virtual void mousePressEvent(QMouseEvent* event);
   virtual void mouseMoveEvent(QMouseEvent* event);
+
 
  private:
   int pointInTabRectIndex(const QPoint& point);

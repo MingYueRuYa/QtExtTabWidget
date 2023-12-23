@@ -20,15 +20,16 @@ QExtTabBar::QExtTabBar(QWidget* parent) : QTabBar(parent) {
 QExtTabBar::~QExtTabBar() {}
 
 QSize QExtTabBar::tabSizeHint(int index) const {
-  return QSize(150, 30);
+  return QSize(kTAB_BUTTON_WIDTH, kTAB_BUTTON_HEIGHT);
 }
 
 bool QExtTabBar::addTab2(const QString& icon, const QString& title,
                          QWidget* widget) {
   this->addTab("");
   CusBtn* cus_btn = new CusBtn(this);
+  cus_btn->setText(title);
   cus_btn->setCheckable(true);
-  cus_btn->setFixedWidth(150);
+  cus_btn->setFixedWidth(kTAB_BUTTON_WIDTH);
   this->group_->addButton(cus_btn);
   this->setTabButton(count() - 1, QTabBar::LeftSide, cus_btn);
   connect(cus_btn, SIGNAL(btn_clicked()), this,
@@ -39,6 +40,34 @@ bool QExtTabBar::addTab2(const QString& icon, const QString& title,
 
 void QExtTabBar::mouse_release_event(QMouseEvent* event) {
   this->mouseReleaseEvent(event);
+}
+
+void QExtTabBar::tab_mouse_move_event(QObject* obj, QMouseEvent* event) {
+  CusBtn* btn = dynamic_cast<CusBtn*>(obj);
+  if (btn == nullptr) {
+    return; 
+  }
+  // 将子窗口坐标转为父窗口
+  QPoint pos = btn->mapToParent(event->pos());
+  // 高度超过标签栏高度 或 标签数量=1 时，开启拖拽
+  if (dragging_ && (event->buttons() & Qt::LeftButton) &&
+      (count() >= 1 || !contentsRect().contains(pos))) {
+     bool containts = false;
+    int index = 0;
+    for (int i = 0; i < count(); ++i) {
+      if (tabRect(i).contains(pos)) {
+        index = i;
+        containts = true;
+        break;
+      }
+    }
+
+    // 拖拽到外面来了
+    if (count() >= 0 && containts) {
+      // emit signal_.signalStartDrag(index);
+      start_drag(index);
+    }
+  }
 }
 
 void QExtTabBar::tab_clicked_changed() {
@@ -59,7 +88,7 @@ bool QExtTabBar::eventFilter(QObject* obj, QEvent* event) {
   } else if (event->type() == QEvent::MouseButtonRelease) {
     this->mouseReleaseEvent((QMouseEvent*)event);
   } else if (event->type() == QEvent::MouseMove) {
-    this->mouseMoveEvent((QMouseEvent*)event);
+    this->tab_mouse_move_event(obj, (QMouseEvent *)event);
   }
   return QTabBar::eventFilter(obj, event);
 }
@@ -116,28 +145,30 @@ void QExtTabBar::mousePressEvent(QMouseEvent* event) {
 void QExtTabBar::mouseMoveEvent(QMouseEvent* event) {
   QTabBar::mouseMoveEvent(event);
 
-  // 高度超过标签栏高度 或 标签数量=1 时，开启拖拽
-  if (dragging_ && (event->buttons() & Qt::LeftButton) &&
-      (count() >= 1 || !contentsRect().contains(event->pos()))) {
-    int index = this->currentIndex();
-    if (index == -1 || (index == count()))
-      return;
+  //// 高度超过标签栏高度 或 标签数量=1 时，开启拖拽
+  //if (dragging_ && (event->buttons() & Qt::LeftButton) &&
+  //    (count() >= 1 || !contentsRect().contains(event->pos()))) {
+  //  int index = this->currentIndex();
+  //  if (index == -1 || (index == count()))
+  //    return;
 
-    bool containts = false;
-    for (int i = 0; i < count(); ++i) {
-      if (tabRect(index).contains(event->pos())) {
-        containts = true;
-        break;
-      }
-    }
+  //  bool containts = false;
+  //  index = 0;
+  //  for (int i = 0; i < count(); ++i) {
+  //    if (tabRect(i).contains(event->pos())) {
+  //      index = i;
+  //      containts = true;
+  //      break;
+  //    }
+  //  }
 
-    // 拖拽到外面来了
-    // if (count() == 1 || containts) {
-    if (count() >= 0 && containts) {
-      // emit signal_.signalStartDrag(index);
-      start_drag(index);
-    }
-  }
+  //  // 拖拽到外面来了
+  //  // if (count() == 1 || containts) {
+  //  if (count() >= 0 && containts) {
+  //    // emit signal_.signalStartDrag(index);
+  //    start_drag(index);
+  //  }
+  //}
 }
 
 void QExtTabBar::start_drag(int index) {

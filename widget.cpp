@@ -3,6 +3,7 @@
 #include "cus_button.h"
 #include "ext_tab_bar.h"
 #include "ext_tab_bar_style.h"
+#include "const.h"
 
 #include <QLabel>
 #include <QTabBar>
@@ -19,7 +20,7 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
   connect(tab_bar_, SIGNAL(switch_widget(QWidget *)), this, SLOT(do_switch_widget(QWidget *)));
   addTab("", "this is test tab 1", new QWidget(this));
   addTab("", "this is test tab 2", new QWidget(this));
-  ui->widget_tabbar_container->setFixedWidth(300);
+  ui->widget_tabbar_container->setFixedWidth(tab_bar_->count()*kTAB_BUTTON_WIDTH);
 }
 
 Widget::~Widget() {
