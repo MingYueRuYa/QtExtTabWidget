@@ -12,6 +12,8 @@ class QExtTabBarStyle : public QProxyStyle {
 
   virtual QRect subElementRect(SubElement element, const QStyleOption *option,
                                const QWidget *widget) const Q_DECL_OVERRIDE;
+  virtual int pixelMetric(PixelMetric metric, const QStyleOption* option,
+                                 const QWidget* widget) const Q_DECL_OVERRIDE; 
 
 private:
   QTabBar* _bar;

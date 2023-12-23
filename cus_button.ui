@@ -6,15 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
+    <width>150</width>
     <height>35</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">border:1px solid blue;</string>
+   <string notr="true">QPushButton#Ui_CusBtn {
+background-color:#FF00FFFF;
+border:1px solid yellow;
+}
+
+QPushButton#Ui_CusBtn:hover {
+background-color:#FF0000FF;
+}
+
+QPushButton#Ui_CusBtn:pressed {
+background-color:#FFFF00FF;
+}
+
+</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">

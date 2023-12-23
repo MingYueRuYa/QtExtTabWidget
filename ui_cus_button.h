@@ -32,19 +32,37 @@ public:
     {
         if (Ui_CusBtn->objectName().isEmpty())
             Ui_CusBtn->setObjectName(QString::fromUtf8("Ui_CusBtn"));
-        Ui_CusBtn->resize(250, 35);
-        Ui_CusBtn->setStyleSheet(QString::fromUtf8("border:1px solid blue;"));
+        Ui_CusBtn->resize(150, 35);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(Ui_CusBtn->sizePolicy().hasHeightForWidth());
+        Ui_CusBtn->setSizePolicy(sizePolicy);
+        Ui_CusBtn->setStyleSheet(QString::fromUtf8("QPushButton#Ui_CusBtn {\n"
+"background-color:#FF00FFFF;\n"
+"border:1px solid yellow;\n"
+"}\n"
+"\n"
+"QPushButton#Ui_CusBtn:hover {\n"
+"background-color:#FF0000FF;\n"
+"}\n"
+"\n"
+"QPushButton#Ui_CusBtn:pressed {\n"
+"background-color:#FFFF00FF;\n"
+"}\n"
+"\n"
+""));
         gridLayout = new QGridLayout(Ui_CusBtn);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
         icon_container = new QWidget(Ui_CusBtn);
         icon_container->setObjectName(QString::fromUtf8("icon_container"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(icon_container->sizePolicy().hasHeightForWidth());
-        icon_container->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(icon_container->sizePolicy().hasHeightForWidth());
+        icon_container->setSizePolicy(sizePolicy1);
         icon_container->setMinimumSize(QSize(30, 0));
         icon_container->setMaximumSize(QSize(40, 30));
         gridLayout_3 = new QGridLayout(icon_container);
@@ -53,11 +71,11 @@ public:
         gridLayout_3->setContentsMargins(10, 0, 0, 0);
         btn_icon = new QPushButton(icon_container);
         btn_icon->setObjectName(QString::fromUtf8("btn_icon"));
-        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(btn_icon->sizePolicy().hasHeightForWidth());
-        btn_icon->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(btn_icon->sizePolicy().hasHeightForWidth());
+        btn_icon->setSizePolicy(sizePolicy2);
 
         gridLayout_3->addWidget(btn_icon, 0, 0, 1, 1);
 
@@ -66,8 +84,8 @@ public:
 
         btn_container = new QWidget(Ui_CusBtn);
         btn_container->setObjectName(QString::fromUtf8("btn_container"));
-        sizePolicy.setHeightForWidth(btn_container->sizePolicy().hasHeightForWidth());
-        btn_container->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(btn_container->sizePolicy().hasHeightForWidth());
+        btn_container->setSizePolicy(sizePolicy1);
         btn_container->setMinimumSize(QSize(30, 0));
         gridLayout_2 = new QGridLayout(btn_container);
         gridLayout_2->setSpacing(0);
@@ -75,11 +93,8 @@ public:
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
         btn_close = new QPushButton(btn_container);
         btn_close->setObjectName(QString::fromUtf8("btn_close"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(btn_close->sizePolicy().hasHeightForWidth());
-        btn_close->setSizePolicy(sizePolicy2);
+        sizePolicy.setHeightForWidth(btn_close->sizePolicy().hasHeightForWidth());
+        btn_close->setSizePolicy(sizePolicy);
         btn_close->setMinimumSize(QSize(20, 20));
         btn_close->setMaximumSize(QSize(20, 20));
 

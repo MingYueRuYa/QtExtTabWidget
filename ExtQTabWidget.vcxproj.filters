@@ -46,6 +46,12 @@
     <ClCompile Include="cus_button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ext_tab_bar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ext_tab_bar_style.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="widget.h">
@@ -54,14 +60,9 @@
     <QtMoc Include="cus_button.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="debug\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="release\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
+    <QtMoc Include="ext_tab_bar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="widget.ui">
@@ -70,5 +71,13 @@
     <QtUic Include="cus_button.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ext_tab_bar_style.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

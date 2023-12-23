@@ -15,16 +15,17 @@ class CusBtn :
 public:
   explicit CusBtn(QWidget *parent = nullptr);
   ~CusBtn();
-
+//   void setWidget(QWidget *widget);
+//   const QWidget* getWidget() const;
 
 protected slots:
   void on_btn_clicked_clicked();
-  void clicked();
 
 signals:
-  void change_index();
+  void btn_clicked();
 
 private:
   Ui::Ui_CusBtn *ui;
+//   QWidget* widget_ = nullptr;
 };
 

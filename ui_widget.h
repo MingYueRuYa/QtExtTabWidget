@@ -46,7 +46,8 @@ public:
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
         Widget->resize(899, 600);
-        Widget->setStyleSheet(QString::fromUtf8("border:1px solid red;"));
+        Widget->setStyleSheet(QString::fromUtf8("border:1px solid red;\n"
+"background-color: rgb(0, 85, 127);"));
         verticalLayout = new QVBoxLayout(Widget);
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -57,6 +58,7 @@ public:
         widget_tabbar = new QWidget(Widget);
         widget_tabbar->setObjectName(QString::fromUtf8("widget_tabbar"));
         widget_tabbar->setMinimumSize(QSize(0, 30));
+        widget_tabbar->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 85, 0);"));
         horizontalLayout_2 = new QHBoxLayout(widget_tabbar);
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
@@ -68,8 +70,9 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(widget_tabbar_container->sizePolicy().hasHeightForWidth());
         widget_tabbar_container->setSizePolicy(sizePolicy);
-        widget_tabbar_container->setStyleSheet(QString::fromUtf8("background-color: black;\n"
-"border-width: 0px;"));
+        widget_tabbar_container->setStyleSheet(QString::fromUtf8("border-width: 0px;\n"
+"\n"
+"background-color: rgb(255, 255, 0);"));
         horizontalLayout_3 = new QHBoxLayout(widget_tabbar_container);
         horizontalLayout_3->setSpacing(0);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));

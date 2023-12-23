@@ -17,7 +17,6 @@ QT_END_NAMESPACE
 
 class QExtTabBar;
 
-#define DRAGABLE_TAB_WIDGET_MIME_KEY "DRAGABLE_TAB_WIGET_MIME_KEY"
 
 class Widget : public QWidget
 {
@@ -27,8 +26,11 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+    bool addTab(const QString &icon, const QString &title, QWidget *widget);
+
 protected slots:
   void do_change_index();
+ void do_switch_widget(QWidget *widget);
 
 private:
     Ui::Widget *ui = nullptr;

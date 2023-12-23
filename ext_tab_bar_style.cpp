@@ -19,3 +19,12 @@ QRect QExtTabBarStyle::subElementRect(SubElement element,
 
 }
 
+int QExtTabBarStyle::pixelMetric(PixelMetric metric, const QStyleOption* option,
+                                 const QWidget* widget) const {
+  if (PM_TabBarTabHSpace == metric) {
+    return 0;
+  } else {
+    return QProxyStyle::pixelMetric(metric, option, widget);
+  }
+}
+
