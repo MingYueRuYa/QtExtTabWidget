@@ -30,3 +30,7 @@ void CusBtn::on_btn_clicked_clicked()
   emit btn_clicked();
 }
 
+void CusBtn::on_btn_close_clicked() {
+  emit btn_closed();
+}
+

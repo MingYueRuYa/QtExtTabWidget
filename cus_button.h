@@ -20,9 +20,11 @@ public:
 
 protected slots:
   void on_btn_clicked_clicked();
+  void on_btn_close_clicked();
 
 signals:
   void btn_clicked();
+  void btn_closed();
 
 private:
   Ui::Ui_CusBtn *ui;
