@@ -33,6 +33,8 @@ class QExtTabBar : public QTabBar {
  signals:
   void switch_widget(QWidget* widget);
   void tab_click_closed(QWidget* widget);
+  void remove_tab(int index, QWidget *widget);
+  void inserted_tab(int index, QWidget *widget, const QString title);
 
  protected slots:
   void tab_clicked_changed();

@@ -35,6 +35,10 @@ class Widget : public QWidget {
   void do_change_index();
   void do_switch_widget(QWidget *widget);
   void on_btn_add_clicked();
+  void do_remove_tab(int index, QWidget *widget);
+
+private:
+  void update_tabbar_width();
 
  private:
   Ui::Widget *ui = nullptr;

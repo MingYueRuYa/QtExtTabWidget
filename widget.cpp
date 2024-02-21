@@ -19,14 +19,15 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget) {
   tab_bar_->setFixedHeight(ui->widget_tabbar_container->height());
   connect(tab_bar_, SIGNAL(switch_widget(QWidget*)), this,
           SLOT(do_switch_widget(QWidget*)));
+  connect(tab_bar_, SIGNAL(remove_tab(int, QWidget*)), this,
+          SLOT(do_remove_tab(int, QWidget*)));
   QWidget* widget = new QWidget(this);
   widget->setStyleSheet("background-color:#FF00FF00");
   addTab("", "this is test tab 1", widget);
   widget = new QWidget(this);
   widget->setStyleSheet("background-color:#FF00FFFF");
   addTab("", "this is test tab 2", widget);
-  ui->widget_tabbar_container->setFixedWidth(tab_bar_->count() *
-                                             kTAB_BUTTON_WIDTH);
+  this->update_tabbar_width();
 }
 
 Widget::~Widget() {
@@ -45,6 +46,17 @@ void Widget::on_btn_add_clicked() {
   QWidget* widget = new QWidget(this);
   widget->setStyleSheet("background-color:#FF0FFFF0");
   this->addTab("", "for add button", widget);
+  this->update_tabbar_width();
+}
+
+void Widget::do_remove_tab(int index, QWidget* widget) {
+  tab_bar_->remove_tab2(index, widget);
+  delete widget;
+  widget = nullptr;
+  this->update_tabbar_width();
+}
+
+void Widget::update_tabbar_width() {
   ui->widget_tabbar_container->setFixedWidth(tab_bar_->count() *
                                              kTAB_BUTTON_WIDTH);
 }

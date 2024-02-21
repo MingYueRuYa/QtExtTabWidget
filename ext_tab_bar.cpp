@@ -92,7 +92,6 @@ void QExtTabBar::tab_clicked_changed() {
 
 void QExtTabBar::tab_closed() {
   CusBtn* btn = (CusBtn*)sender();
-  Widget* parent = (Widget*)this->parentWidget();
   QWidget* widget = nullptr;
   if ((widget = this->get_widget(btn)) == nullptr) {
     return;
@@ -101,7 +100,7 @@ void QExtTabBar::tab_closed() {
   if (index < 0) {
     return;
   }
-  parent->remove_tab(index, widget);
+  emit remove_tab(index, widget);
 }
 
 bool QExtTabBar::eventFilter(QObject* obj, QEvent* event) {
@@ -238,6 +237,7 @@ bool QExtTabBar::merge_tab(QDropEvent* event) {
     if (nullptr == widget) {
       return false; 
     }
+    // TODO: 暂且不处理拖拽合并操作
     insert_tab(insert_index, widget, data->label);
     setCurrentIndex(insert_index);
     return true;
